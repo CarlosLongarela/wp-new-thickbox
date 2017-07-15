@@ -383,7 +383,7 @@ class auto_thickbox_options {
 		<th scope="row"><a href="<?php $this->util->_e('https://developer.mozilla.org/en/CSS/font-family'); ?>" target="_blank"><?php echo ucwords($this->util->__('Font Family', 'Font family')); ?></a></th>
 		<th scope="row"><?php $this->util->_e('Title'); ?></th>
 		<td>
-			<input type="text" name="auto-thickbox-plus[font_title]" value="<?php echo $this->util->esc_attr($this->options['font_title']); ?>" style="width:70%" />
+			<input type="text" name="auto-thickbox-plus[font_title]" value="<?php echo $this->util->esc_attr($this->options['font_title']); ?>" class="large-text" />
 			<label><input type="checkbox" name="auto-thickbox-plus[font_weight_title]" value="bold"<?php $this->util->checked($this->options['font_weight_title'], 'bold'); ?> />
 			<?php $this->util->_e('Bold'); ?></label>
 		</td>
@@ -392,7 +392,7 @@ class auto_thickbox_options {
 		<th scope="row"></th>
 		<th scope="row"><?php $this->util->_e('Caption'); ?></th>
 		<td>
-			<input type="text" name="auto-thickbox-plus[font_cap]" value="<?php echo $this->util->esc_attr($this->options['font_cap']); ?>" style="width:70%" />
+			<input type="text" name="auto-thickbox-plus[font_cap]" value="<?php echo $this->util->esc_attr($this->options['font_cap']); ?>" class="large-text" />
 			<label><input type="checkbox" name="auto-thickbox-plus[font_weight_cap]" value="bold"<?php $this->util->checked($this->options['font_weight_cap'], 'bold'); ?> />
 			<?php $this->util->_e('Bold'); ?></label>
 		</td>
@@ -739,7 +739,7 @@ class auto_thickbox_options {
 	<tr>
 		<th scope="row"><?php echo $this->texts['prev2']; ?></th>
 		<td>
-			<input type="text" name="auto-thickbox-plus[img_prev]" value="<?php echo $img_prev; ?>" style="width:70%"<?php $this->util->disabled($img_prev_none); ?> />
+			<input type="text" name="auto-thickbox-plus[img_prev]" value="<?php echo $img_prev; ?>" class="large-text"<?php $this->util->disabled($img_prev_none); ?> />
 			<input type="button" class="media-uploader button" value="<?php echo $text_sel_file; ?>" />
 			<label><input type="checkbox" name="auto-thickbox-plus[img_prev]" value="none"<?php $this->util->checked($img_prev_none); ?> onclick="disableOption(this)" />
 			<?php echo $this->texts['none']; ?></label>
@@ -748,7 +748,7 @@ class auto_thickbox_options {
 	<tr>
 		<th scope="row"><?php echo $this->texts['next2']; ?></th>
 		<td>
-			<input type="text" name="auto-thickbox-plus[img_next]" value="<?php echo $img_next; ?>" style="width:70%"<?php $this->util->disabled($img_next_none); ?> />
+			<input type="text" name="auto-thickbox-plus[img_next]" value="<?php echo $img_next; ?>" class="large-text"<?php $this->util->disabled($img_next_none); ?> />
 			<input type="button" class="media-uploader button" value="<?php echo $text_sel_file; ?>" />
 			<label><input type="checkbox" name="auto-thickbox-plus[img_next]" value="none"<?php $this->util->checked($img_next_none); ?> onclick="disableOption(this)" />
 			<?php echo $this->texts['none']; ?></label>
@@ -757,7 +757,7 @@ class auto_thickbox_options {
 	<tr>
 		<th scope="row"><?php echo $this->texts['first2']; ?></th>
 		<td>
-			<input type="text" name="auto-thickbox-plus[img_first]" value="<?php echo $img_first; ?>" style="width:70%"<?php $this->util->disabled($img_first_none); ?> />
+			<input type="text" name="auto-thickbox-plus[img_first]" value="<?php echo $img_first; ?>" class="large-text"<?php $this->util->disabled($img_first_none); ?> />
 			<input type="button" class="media-uploader button" value="<?php echo $text_sel_file; ?>" />
 			<label><input type="checkbox" name="auto-thickbox-plus[img_first]" value="none"<?php $this->util->checked($img_first_none); ?> onclick="disableOption(this)" />
 			<?php echo $this->texts['none']; ?></label>
@@ -766,7 +766,7 @@ class auto_thickbox_options {
 	<tr>
 		<th scope="row"><?php echo $this->texts['last2']; ?></th>
 		<td>
-			<input type="text" name="auto-thickbox-plus[img_last]" value="<?php echo $img_last; ?>" style="width:70%"<?php $this->util->disabled($img_last_none); ?> />
+			<input type="text" name="auto-thickbox-plus[img_last]" value="<?php echo $img_last; ?>" class="large-text"<?php $this->util->disabled($img_last_none); ?> />
 			<input type="button" class="media-uploader button" value="<?php echo $text_sel_file; ?>" />
 			<label><input type="checkbox" name="auto-thickbox-plus[img_last]" value="none"<?php $this->util->checked($img_last_none); ?> onclick="disableOption(this)" />
 			<?php echo $this->texts['none']; ?></label>
@@ -775,7 +775,7 @@ class auto_thickbox_options {
 	<tr>
 		<th scope="row"><?php echo $this->texts['close']; ?></th>
 		<td>
-			<input type="text" name="auto-thickbox-plus[img_close]" value="<?php echo $img_close; ?>" style="width:70%"<?php $this->util->disabled($img_close_none); ?> />
+			<input type="text" name="auto-thickbox-plus[img_close]" value="<?php echo $img_close; ?>" class="large-text"<?php $this->util->disabled($img_close_none); ?> />
 			<input type="button" class="media-uploader button" value="<?php echo $text_sel_file; ?>" />
 			<label><input type="checkbox" name="auto-thickbox-plus[img_close]" value="none"<?php $this->util->checked($img_close_none); ?> onclick="disableOption(this)" />
 			<?php echo $this->texts['none']; ?></label>
@@ -784,7 +784,7 @@ class auto_thickbox_options {
 	<tr>
 		<th scope="row"><?php echo $this->texts['close']; ?> (<?php $this->util->_e('Button'); ?>)</th>
 		<td>
-			<input type="text" name="auto-thickbox-plus[img_close_btn]" value="<?php echo $img_close_btn; ?>" style="width:70%"<?php $this->util->disabled($img_close_btn_none); ?> />
+			<input type="text" name="auto-thickbox-plus[img_close_btn]" value="<?php echo $img_close_btn; ?>" class="large-text"<?php $this->util->disabled($img_close_btn_none); ?> />
 			<input type="button" class="media-uploader button" value="<?php echo $text_sel_file; ?>" />
 			<label><input type="checkbox" name="auto-thickbox-plus[img_close_btn]" value="none"<?php $this->util->checked($img_close_btn_none); ?> onclick="disableOption(this)" />
 			<?php echo $this->texts['none']; ?></label>
@@ -793,7 +793,7 @@ class auto_thickbox_options {
 	<tr>
 		<th scope="row"><?php $this->util->_e('Loading&#8230;', 'Loading...'); ?></th>
 		<td>
-			<input type="text" name="auto-thickbox-plus[img_load]" value="<?php echo $img_load; ?>" style="width:70%"<?php $this->util->disabled($img_load_none); ?> />
+			<input type="text" name="auto-thickbox-plus[img_load]" value="<?php echo $img_load; ?>" class="large-text"<?php $this->util->disabled($img_load_none); ?> />
 			<input type="button" class="media-uploader button" value="<?php echo $text_sel_file; ?>" />
 			<label><input type="checkbox" name="auto-thickbox-plus[img_load]" value="none"<?php $this->util->checked($img_load_none); ?> onclick="disableOption(this)" />
 			<?php echo $this->texts['none']; ?></label>
@@ -921,9 +921,10 @@ class auto_thickbox_options {
 	var $settings_page_type = 'settings_page_auto-thickbox-plus';
 	var $option_group = 'auto-thickbox-plus-options';
 
-	function auto_thickbox_options(&$auto_thickbox) {
-		$this->__construct($auto_thickbox); // for PHP4
-	}
+// Modificado
+//	function auto_thickbox_options(&$auto_thickbox) {
+//		$this->__construct($auto_thickbox); // for PHP4
+//	}
 
 	function __construct(&$auto_thickbox) {
 		add_action('admin_menu', array(&$this, 'register_options_page'));

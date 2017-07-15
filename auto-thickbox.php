@@ -548,11 +548,13 @@ SCRIPT;
 	var $texts;
 	var $util;
 
-	function auto_thickbox() {
-		$this->__construct(); // for PHP4
-	}
+// Modificado
+//	function auto_thickbox() {
+//		$this->__construct(); // for PHP4
+//	}
 
 	function __construct() {
+
 		load_plugin_textdomain('auto-thickbox', false, 'auto-thickbox-plus/languages');
 
 		if (require_once dirname(__FILE__) . '/auto-thickbox-utils.php')
