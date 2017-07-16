@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Auto ThickBox Plus
+Plugin Name: WP New ThickBox
 Plugin URI: http://attosoft.info/en/blog/auto-thickbox-plus/
 Description: Automatically applies ThickBox script that overlays linked image, inline, iFramed and AJAX content on the page in simple effect.
 Version: 1.9

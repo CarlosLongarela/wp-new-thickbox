@@ -15,6 +15,9 @@ if ( @ini_get('pcre.recursion_limit') <= 250000 )
  *
  * @package Anchor Utils
  **/
+
+// Modificado: add static a todas las funciones
+
 class anchor_utils {
 
 	/**
@@ -22,7 +25,7 @@ class anchor_utils {
 	 *
 	 * @return void
 	 **/
-	function ob_start() {
+	static function ob_start() {
 		static $done = false;
 
 		if ( $done )
@@ -41,7 +44,7 @@ class anchor_utils {
 	 * @param string $text
 	 * @return string $text
 	 **/
-	function ob_filter($text) {
+	static function ob_filter($text) {
 		global $escape_anchor_filter;
 		$escape_anchor_filter = array();
 
@@ -65,7 +68,7 @@ class anchor_utils {
 	 *
 	 * @return void
 	 **/
-	function ob_flush() {
+	static function ob_flush() {
 		static $done = true;
 
 		if ( $done )
@@ -81,7 +84,7 @@ class anchor_utils {
 	 * @param array $match
 	 * @return string $str
 	 **/
-	function ob_filter_callback($match) {
+	static function ob_filter_callback($match) {
 		# skip empty anchors
 		if ( !trim($match[2]) )
 			return $match[0];
@@ -105,7 +108,7 @@ class anchor_utils {
 	 * @param string $text
 	 * @return string $text
 	 **/
-	function filter($text) {
+	static function filter($text) {
 		if ( !has_filter('filter_anchor') )
 			return $text;
 
@@ -133,7 +136,7 @@ class anchor_utils {
 	 * @param array $match
 	 * @return string $str
 	 **/
-	function filter_callback($match) {
+	static function filter_callback($match) {
 		# skip empty anchors
 		if ( !trim($match[2]) )
 			return $match[0];
@@ -157,7 +160,7 @@ class anchor_utils {
 	 * @param array $match
 	 * @return array $anchor
 	 **/
-	function parse_anchor($match) {
+	static function parse_anchor($match) {
 		$anchor = array();
 		$anchor['attr'] = anchor_utils::shortcode_parse_atts($match[1]);
 
@@ -185,7 +188,7 @@ class anchor_utils {
 	 * @see shortcode_parse_atts() in wp-includes/shortcodes.php
 	 * @note This function accepts custom data attributes (data-*)
 	 */
-	function shortcode_parse_atts($text) {
+	static function shortcode_parse_atts($text) {
 		$atts = array();
 		$pattern = '/([\w-]+)\s*=\s*"([^"]*)"(?:\s|$)|([\w-]+)\s*=\s*\'([^\']*)\'(?:\s|$)|([\w-]+)\s*=\s*([^\s\'"]+)(?:\s|$)|"([^"]*)"(?:\s|$)|(\S+)(?:\s|$)/';
 		$text = preg_replace("/[\x{00a0}\x{200b}]+/u", " ", $text);
@@ -214,7 +217,7 @@ class anchor_utils {
 	 * @param array $anchor
 	 * @return string $anchor
 	 **/
-	function build_anchor($anchor) {
+	static function build_anchor($anchor) {
 		$anchor['attr']['href'] = function_exists('esc_url') ? esc_url($anchor['attr']['href']) : clean_url($anchor['attr']['href']);
 
 		$str = '<a ';
@@ -238,7 +241,7 @@ class anchor_utils {
 	 * @param string $text
 	 * @return string $text
 	 **/
-	function escape($text) {
+	static function escape($text) {
 		global $escape_anchor_filter;
 
 		if ( !isset($escape_anchor_filter) )
@@ -267,7 +270,7 @@ class anchor_utils {
 	 * @param array $match
 	 * @return string $text
 	 **/
-	function escape_callback($match) {
+	static function escape_callback($match) {
 		global $escape_anchor_filter;
 
 		$tag_id = "----escape_anchor_utils:" . md5($match[0]) . "----";
@@ -282,7 +285,7 @@ class anchor_utils {
 	 * @param string $text
 	 * @return string $text
 	 **/
-	function unescape($text) {
+	static function unescape($text) {
 		global $escape_anchor_filter;
 
 		if ( !$escape_anchor_filter )

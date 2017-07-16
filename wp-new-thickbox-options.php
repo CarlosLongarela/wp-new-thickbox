@@ -1,6 +1,6 @@
 <?php
 /*
- * Auto ThickBox Plus Options
+ * WP New ThickBox Options
  * Copyright (C) 2010-2012 attosoft <http://attosoft.info/en/>
  * This file is distributed under the same license as the Auto ThickBox Plus package.
  * attosoft <contact@attosoft.info>, 2010.

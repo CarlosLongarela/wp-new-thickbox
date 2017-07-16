@@ -1,4 +1,4 @@
-=== Auto ThickBox Plus ===
+=== WP New ThickBox ===
 Contributors: attosoft
 Donate link: http://attosoft.info/en/donate/
 Tags: lightbox, thickbox, gallery, image, images, thumbnail, thumbnails, popup, pop-up, overlay, photo, photos, picture, pictures, javascript, inline, iframe, ajax, jquery, plugin, plugins, link, links, widget, widgets, nextgen, nextgen gallery, mobile, iphone, android
