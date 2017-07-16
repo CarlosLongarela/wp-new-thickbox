@@ -1,9 +1,8 @@
 <?php
-/*
+/**
  * WP New ThickBox Utils
- * Copyright (C) 2012 attosoft <http://attosoft.info/en/>
- * This file is distributed under the same license as the Auto ThickBox Plus package.
- * attosoft <contact@attosoft.info>, 2012.
+ * This file is distributed under the same license as the WP New ThickBox package.
+ * Carlos Longarela <carlos@longarela.eu>, 2017
  */
 
 class auto_thickbox_utils {
@@ -76,7 +75,7 @@ function checked( $checked, $current = true, $echo = true ) {
 // @note '$plugin' is defined since WordPress 2.8
 function plugins_url( $path, $plugin = '' ) {
 	if (!$plugin) $plugin = __FILE__;
-	return version_compare('2.8', get_bloginfo('version')) > 0 ? plugins_url( 'auto-thickbox-plus/' . $path ) : plugins_url( $path, $plugin );
+	return version_compare('2.8', get_bloginfo('version')) > 0 ? plugins_url( 'wp-new-thickbox/' . $path ) : plugins_url( $path, $plugin );
 }
 
 } # auto_thickbox_options

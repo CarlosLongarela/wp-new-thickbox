@@ -1,128 +1,160 @@
 <?php
 /*
 Plugin Name: WP New ThickBox
-Plugin URI: http://attosoft.info/en/blog/auto-thickbox-plus/
-Description: Automatically applies ThickBox script that overlays linked image, inline, iFramed and AJAX content on the page in simple effect.
-Version: 1.9
-Author: attosoft
-Author URI: http://attosoft.info/en/
+Plugin URI: https://github.com/CarlosLongarela/wp-new-thickbox
+Description: Auto ThickBox Plus plugin updated version for works with last WordPress version and PHP 7.x thanks to Miguel Moliné Escalona (almendron) modifications and suggests. Automatically applies ThickBox script that overlays linked image, inline, iFramed and AJAX content on the page in simple effect.
+Version: 1.0
+Author: Carlos Longarela
+Author URI: https://desarrolloweb.longarela.eu/
 License: GPL 2.0
-Text Domain: auto-thickbox
+Text Domain: wp-new-thickbox
 Domain Path: /languages
 */
 
-/*	Copyright 2010-2012 attosoft (contact@attosoft.info)
+/**
+ * PREVIOUS PLUGIN HEADER
+ *
+ * Plugin Name: Auto ThickBox Plus
+ * Plugin URI: http://attosoft.info/en/blog/wp-new-thickbox/
+ * Description: Automatically applies ThickBox script that overlays linked image, inline, iFramed and AJAX content on the page in simple effect.
+ * Version: 1.9
+ * Author: attosoft
+ * Author URI: http://attosoft.info/en/
+ * License: GPL 2.0
+ * Text Domain: auto-thickbox
+ * Domain Path: /languages
 
-	This program is free software; you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; either version 2 of the License, or
-	(at your option) any later version.
+ * Copyright 2010-2012 attosoft (contact@attosoft.info)
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ * This plugin is partially based on Auto Thickbox by Denis de Bernardy
+ * http://www.semiologic.com/software/auto-thickbox/
+ */
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
-/* This plugin is partially based on Auto Thickbox by Denis de Bernardy
-	http://www.semiologic.com/software/auto-thickbox/
-*/
-
-define('AUTO_THICKBOX_PLUS_VER', '1.9');
+define( 'WP_NEW_THICKBOX_VER', '1.0' );
 
 /**
- * auto_thickbox
+ * WPNewThickbox Primary class.
  *
- * @package Auto Thickbox
- **/
-class auto_thickbox {
+ * @package WP New Thickbox
+ */
+class WPNewThickbox {
 
 	/**
-	 * filter()
+	 * Check anchor array and return image, iframe or class.
 	 *
-	 * @param array $anchor
+	 * @param array $anchor Array with anchor params.
+	 *
 	 * @return anchor $anchor
-	 **/
-	function filter($anchor) {
-		if ( preg_match("/\.(?:jpe?g|gif|png|bmp|webp)\b/i", $anchor['attr']['href']) )
-			return auto_thickbox::image($anchor);
-		elseif ( !empty($anchor['attr']['class']) && in_array('thickbox', $anchor['attr']['class']) )
-			return auto_thickbox::iframe($anchor);
-		elseif ( strpos($anchor['attr']['href'], 'TB_iframe') !== false || strpos($anchor['attr']['href'], '#TB_inline') !== false )
-			return $this->add_thickbox_class($anchor);
-		else
+	 */
+	function filter( $anchor ) {
+		if ( preg_match( "/\.(?:jpe?g|gif|png|bmp|webp)\b/i", $anchor['attr']['href'] ) ) {
+			return auto_thickbox::image( $anchor );
+		} elseif ( ! empty( $anchor['attr']['class'] ) && in_array( 'thickbox', $anchor['attr']['class'] ) ) {
+			return auto_thickbox::iframe( $anchor );
+		} elseif ( strpos( $anchor['attr']['href'], 'TB_iframe' ) !== false || strpos( $anchor['attr']['href'], '#TB_inline' ) !== false ) {
+			return $this->add_thickbox_class( $anchor );
+		} else {
 			return $anchor;
-	} # filter()
+		}
+	} // End of filter().
 
-	function add_thickbox_class($anchor) {
-		if ( !$anchor['attr']['class'] ) {
+	/**
+	 * Add Thickbox class to element.
+	 *
+	 * @param array $anchor Array with anchor params.
+	 *
+	 * @return anchor $anchor
+	 */
+	function add_thickbox_class( $anchor ) {
+		if ( ! $anchor['attr']['class'] ) {
 			$anchor['attr']['class'][] = 'thickbox';
 			$anchor['attr']['class'][] = 'no_icon';
 		} else {
 			$no_thickbox_found;
-			foreach ( explode(' ', trim($this->options['no_thickbox'])) as $no_thickbox ) {
-				$no_thickbox_found = in_array($no_thickbox, $anchor['attr']['class']);
-				if ( $no_thickbox_found )
+			foreach ( explode( ' ', trim( $this->options['no_thickbox'] ) ) as $no_thickbox ) {
+				$no_thickbox_found = in_array( $no_thickbox, $anchor['attr']['class'] );
+				if ( $no_thickbox_found ) {
 					break;
+				}
 			}
-			if ( !in_array('thickbox', $anchor['attr']['class']) && !$no_thickbox_found )
+			if ( ! in_array( 'thickbox', $anchor['attr']['class'] ) && ! $no_thickbox_found ) {
 				$anchor['attr']['class'][] = 'thickbox';
-			if ( !in_array('no_icon', $anchor['attr']['class']) && !in_array('noicon', $anchor['attr']['class']) )
+			}
+
+			if ( ! in_array( 'no_icon', $anchor['attr']['class'] ) && ! in_array( 'noicon', $anchor['attr']['class'] ) ) {
 				$anchor['attr']['class'][] = 'no_icon';
+			}
 		}
 		return $anchor;
-	}
+	} // End of add_thickbox_class( $anchor ).
 
 	/**
-	 * image()
+	 * Add Thickbox class to image.
 	 *
-	 * @param array $anchor
+	 * @param array $anchor Array with anchor params.
+	 *
 	 * @return anchor $anchor
-	 **/
-	function image($anchor) {
-		if ( ($this->options['thickbox_img'] == 'off' && preg_match("/^\s*<\s*img\s.+?>\s*$/is", $anchor['body']))
-			|| ($this->options['thickbox_text'] == 'off' && !preg_match("/^\s*<\s*img\s.+?>\s*$/is", $anchor['body']))
-			|| ($this->options['thickbox_target'] == 'off' && !empty($anchor['attr']['target'])) )
-			return $anchor;
+	 */
+	function image( $anchor ) {
+		if ( ( 'off' === $this->options['thickbox_img'] && preg_match( "/^\s*<\s*img\s.+?>\s*$/is", $anchor['body'] ) )
+			|| ( 'off' === $this->options['thickbox_text'] && ! preg_match( "/^\s*<\s*img\s.+?>\s*$/is", $anchor['body'] ) )
+			|| ( 'off' === $this->options['thickbox_target'] && ! empty( $anchor['attr']['target'] ) ) ) {
+				return $anchor;
+		}
 
-		$anchor = $this->add_thickbox_class($anchor);
+		$anchor = $this->add_thickbox_class( $anchor );
 
-		if ( $this->options['thickbox_style'] == 'gallery' && in_the_loop() && !$anchor['attr']['rel'] )
+		if ( 'gallery' === $this->options['thickbox_style'] && in_the_loop() && ! $anchor['attr']['rel'] ) {
 			$anchor['attr']['rel'][] = 'gallery-' . get_the_ID();
+		}
 
-		if ( empty($anchor['attr']['title']) ) {
-			if ( preg_match("/\b(?:alt|title)\s*=\s*('|\")(.*?)\\1/i", $anchor['body'], $title) ) {
-				$anchor['attr']['title'] = end($title);
+		if ( empty( $anchor['attr']['title'] ) ) {
+			if ( preg_match( "/\b(?:alt|title)\s*=\s*('|\")(.*?)\\1/i", $anchor['body'], $title ) ) {
+				$anchor['attr']['title'] = end( $title );
 			}
 		}
 
 		return $anchor;
-	} # image()
+	} // End of image( $anchor ).
 
 	/**
-	 * iframe()
+	 * Add Thickbox class to iframe.
 	 *
-	 * @return void
-	 **/
-	function iframe($anchor) {
-		if ( strpos($anchor['attr']['href'], 'TB_iframe') !== false || strpos($anchor['attr']['href'], '#TB_inline') !== false )
+	 * @param array $anchor Array with anchor params.
+	 *
+	 * @return anchor $anchor
+	 */
+	function iframe( $anchor ) {
+		if ( false !== strpos( $anchor['attr']['href'], 'TB_iframe' ) || false !== strpos( $anchor['attr']['href'], '#TB_inline' ) ) {
 			return $anchor;
-		if ( strpos($anchor['attr']['href'], '://') === false || strpos($anchor['attr']['href'], $_SERVER['HTTP_HOST']) !== false )
-			return $anchor; // not append 'TB_iframe' to URL in the same domain (i.e. display as not iframe but AJAX content)
+		}
 
-		# strip anchor ref
-		$href = explode('#', $anchor['attr']['href']);
-		$anchor['attr']['href'] = array_shift($href);
+		if ( false === strpos( $anchor['attr']['href'], '://' ) || false !== strpos( $anchor['attr']['href'], wp_unslash( $_SERVER['HTTP_HOST'] ) ) ) {
+			return $anchor; // Not append 'TB_iframe' to URL in the same domain (i.e. display as not iframe but AJAX content).
+		}
 
-		$anchor['attr']['href'] .= ( ( strpos($anchor['attr']['href'], '?') === false ) ? '?' : '&' )
-			. 'TB_iframe' . ( count($href) == 0 ? '' : '#' . implode('#', $href) );
+		// Strip anchor ref.
+		$href = explode( '#', $anchor['attr']['href'] );
+		$anchor['attr']['href'] = array_shift( $href );
+
+		$anchor['attr']['href'] .= ( ( false === strpos( $anchor['attr']['href'], '?' ) ) ? '?' : '&' )
+			. 'TB_iframe' . ( 0 === count( $href ) ? '' : '#' . implode( '#', $href ) );
 
 		return $anchor;
-	} # iframe()
+	} // End of iframe( $anchor ).
 
 	/**
 	 * scripts()
@@ -133,7 +165,7 @@ class auto_thickbox {
 		if ( $this->options['thickbox_type'] == 'modified' ) {
 			wp_deregister_script('thickbox');
 			$in_footer = $this->options['script_place'] == 'footer';
-			wp_register_script('thickbox', $this->util->plugins_url('thickbox.min.js'), array('jquery'), AUTO_THICKBOX_PLUS_VER, $in_footer);
+			wp_register_script('thickbox', $this->util->plugins_url('thickbox.min.js'), array('jquery'), WP_NEW_THICKBOX_VER, $in_footer);
 		}
 		wp_enqueue_script('thickbox');
 		if ( $this->options['thickbox_type'] == 'modified' ) {
@@ -172,7 +204,7 @@ class auto_thickbox {
 	function styles() {
 		if ( $this->options['thickbox_type'] == 'modified' ) {
 			wp_deregister_style('thickbox');
-			wp_register_style('thickbox', $this->util->plugins_url('thickbox.min.css'), false, AUTO_THICKBOX_PLUS_VER);
+			wp_register_style( 'thickbox', $this->util->plugins_url( 'thickbox.min.css' ), false, WP_NEW_THICKBOX_VER );
 		}
 		wp_enqueue_style('thickbox');
 	} # styles()
@@ -529,15 +561,15 @@ SCRIPT;
 
 	function add_auto_thickbox_action_links($links, $file) {
 		if ( $file == plugin_basename(__FILE__) )
-			$links[] = '<a href="options-general.php?page=auto-thickbox-plus">' . $this->util->__('Settings') . '</a>';
+			$links[] = '<a href="options-general.php?page=wp-new-thickbox">' . $this->util->__('Settings') . '</a>';
 		return $links;
 	}
 
 	// Additional links on the Plugins page
 	function add_auto_thickbox_links($links, $file) {
 		if ( $file == plugin_basename(__FILE__) ) {
-			$links[] = '<a href="plugin-install.php?tab=plugin-information&plugin=auto-thickbox-plus&TB_iframe" class="thickbox" title="Auto ThickBox Plus">' . $this->util->__('Show Details', 'Details') . '</a>';
-			$links[] = '<a href="http://wordpress.org/support/plugin/auto-thickbox-plus" target="_blank">' . $this->util->__('Support') . '</a>';
+			$links[] = '<a href="plugin-install.php?tab=plugin-information&plugin=wp-new-thickbox&TB_iframe" class="thickbox" title="Auto ThickBox Plus">' . $this->util->__('Show Details', 'Details') . '</a>';
+			$links[] = '<a href="http://wordpress.org/support/plugin/wp-new-thickbox" target="_blank">' . $this->util->__('Support') . '</a>';
 			$links[] = '<a href="' . $this->util->__('http://attosoft.info/en/') . 'contact/" target="_blank">' . ucfirst($this->util->__('Contact', 'contact')) . '</a>';
 			$links[] = '<a href="' . $this->util->__('http://attosoft.info/en/') . 'donate/" target="_blank">' . $this->util->__('Donate') . '</a>';
 		}
@@ -555,9 +587,9 @@ SCRIPT;
 
 	function __construct() {
 
-		load_plugin_textdomain('auto-thickbox', false, 'auto-thickbox-plus/languages');
+		load_plugin_textdomain('auto-thickbox', false, 'wp-new-thickbox/languages');
 
-		if (require_once dirname(__FILE__) . '/auto-thickbox-utils.php')
+		if (require_once dirname(__FILE__) . '/wp-new-thickbox-utils.php')
 			$this->util = new auto_thickbox_utils();
 		$this->init_options();
 		$this->init_texts();
@@ -688,7 +720,7 @@ SCRIPT;
 			'img_close_btn' => $this->util->plugins_url('images/tb-close.png'),
 			'img_load' => $this->util->plugins_url('images/loadingAnimation.gif')
 		);
-		$this->options = get_option('auto-thickbox-plus');
+		$this->options = get_option('wp-new-thickbox');
 		$this->options = $this->options ? wp_parse_args($this->options, $this->options_def) : $this->options_def;
 
 		// XXX: transition code for v0.5 or earlier
@@ -799,7 +831,7 @@ SCRIPT;
 		if ($this->is_default_options('post_id')) {
 			$args = array(
 				'post_status' => 'draft',
-				'post_type' => 'auto-thickbox-plus'
+				'post_type' => 'wp-new-thickbox'
 			);
 			$posts = get_posts($args);
 			if (count($posts))
@@ -823,7 +855,7 @@ SCRIPT;
 		}
 
 		if ($updateOption)
-			update_option('auto-thickbox-plus', $this->options);
+			update_option('wp-new-thickbox', $this->options);
 	}
 
 	function init_texts() {
@@ -854,8 +886,7 @@ SCRIPT;
 
 } # auto_thickbox
 
-add_action('init', 'init_auto_thickbox');
-function init_auto_thickbox() {
-	new auto_thickbox();
+add_action('init', 'init_wp_new_thickbox');
+function init_wp_new_thickbox() {
+	new WPNewThickbox();
 }
-?>
