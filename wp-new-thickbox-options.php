@@ -32,11 +32,11 @@ class WPNewThickboxOptions {
 		if ( $this->has_slider ) {
 			$deps[] = 'jquery-ui-slider';
 		}
-		wp_enqueue_script( 'auto-thickbox', $this->util->plugins_url( 'auto-thickbox.js' ), $deps, WP_NEW_THICKBOX_VER, true );
+		wp_enqueue_script( 'wp-new-thickbox', $this->util->plugins_url( 'wp-new-thickbox.js' ), $deps, WP_NEW_THICKBOX_VER, true );
 	}
 
 	function register_styles() {
-		wp_enqueue_style( 'auto-thickbox', $this->util->plugins_url( 'auto-thickbox.css' ), array( 'farbtastic', 'thickbox' ), WP_NEW_THICKBOX_VER );
+		wp_enqueue_style( 'wp-new-thickbox', $this->util->plugins_url( 'wp-new-thickbox.css' ), array( 'farbtastic', 'thickbox' ), WP_NEW_THICKBOX_VER );
 	}
 
 	function options_page() {
@@ -85,13 +85,13 @@ class WPNewThickboxOptions {
 		</td>
 	</tr>
 	<tr>
-		<th scope="row"><?php _e( 'Auto ThickBox', 'wp-new-thickbox' ); ?></th>
+		<th scope="row"><?php _e( 'WP New ThickBox', 'wp-new-thickbox' ); ?></th>
 		<td>
-			<label><input type="radio" name="wp-new-thickbox[auto_thickbox]" value="filter"<?php $this->util->checked( $this->options['auto_thickbox'], 'filter' ); ?> />
+			<label><input type="radio" name="wp-new-thickbox[wp_new_thickbox]" value="filter"<?php $this->util->checked( $this->options['wp_new_thickbox'], 'filter' ); ?> />
 			<?php _e( 'WordPress Filters', 'wp-new-thickbox' ); ?> (<?php echo $this->texts['content_etc']; ?>)</label><br />
-			<label><input type="radio" name="wp-new-thickbox[auto_thickbox]" value="js"<?php $this->util->checked( $this->options['auto_thickbox'], 'js' ); ?> />
+			<label><input type="radio" name="wp-new-thickbox[wp_new_thickbox]" value="js"<?php $this->util->checked( $this->options['wp_new_thickbox'], 'js' ); ?> />
 			<?php _e( 'JavaScript', 'wp-new-thickbox' ); ?> (<?php _e( 'Whole Page', 'wp-new-thickbox' ); ?>)</label><br />
-			<label><input type="radio" name="wp-new-thickbox[auto_thickbox]" value="disabled"<?php $this->util->checked( $this->options['auto_thickbox'], 'disabled' ); ?> />
+			<label><input type="radio" name="wp-new-thickbox[wp_new_thickbox]" value="disabled"<?php $this->util->checked( $this->options['wp_new_thickbox'], 'disabled' ); ?> />
 			<?php _e( 'Disabled', 'wp-new-thickbox' ); ?></label>
 		</td>
 	</tr>
@@ -114,7 +114,7 @@ class WPNewThickboxOptions {
 		</td>
 	</tr>
 	<tr>
-		<th scope="row"><?php _e( 'Auto Resize', 'wp-new-thickbox'); ?></th>
+		<th scope="row"><?php _e( 'Auto Resize', 'wp-new-thickbox' ); ?></th>
 		<td>
 			<label class="item"><input type="checkbox" name="wp-new-thickbox[auto_resize_img]"<?php $this->util->checked( $this->options['auto_resize_img'], 'on' ); ?> />
 			<?php echo $this->texts['image']; ?></label>
@@ -922,20 +922,20 @@ class WPNewThickboxOptions {
 	var $option_group = 'wp-new-thickbox-options';
 
 // Modificado
-//	function auto_thickbox_options(&$auto_thickbox) {
-//		$this->__construct($auto_thickbox); // for PHP4
+//	function wp_new_thickbox_options(&$wp_new_thickbox) {
+//		$this->__construct($wp_new_thickbox); // for PHP4
 //	}
 
-	function __construct( &$auto_thickbox ) {
+	function __construct( &$wp_new_thickbox ) {
 		add_action( 'admin_menu', array( &$this, 'register_options_page' ));
 		add_action( 'admin_init', array( &$this, 'register_options' ));
 		add_action( 'admin_print_scripts-' . $this->settings_page_type, array( &$this, 'register_scripts' ));
 		add_action( 'admin_print_styles-' . $this->settings_page_type, array( &$this, 'register_styles' ));
 
-		$this->util        = &$auto_thickbox->util;
-		$this->options_def = &$auto_thickbox->options_def;
-		$this->options     = &$auto_thickbox->options;
-		$this->texts       = &$auto_thickbox->texts;
+		$this->util        = &$wp_new_thickbox->util;
+		$this->options_def = &$wp_new_thickbox->options_def;
+		$this->options     = &$wp_new_thickbox->options;
+		$this->texts       = &$wp_new_thickbox->texts;
 	}
 
 	function register_options() {
@@ -966,6 +966,5 @@ class WPNewThickboxOptions {
 		}
 		return $options;
 	}
-} # auto_thickbox_options
-
+}
 ?>

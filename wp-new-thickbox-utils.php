@@ -5,7 +5,7 @@
  * Carlos Longarela <carlos@longarela.eu>, 2017
  */
 
-class auto_thickbox_utils {
+class WpNewThickboxUtils {
 
 	/**
 	* @since 1.0
