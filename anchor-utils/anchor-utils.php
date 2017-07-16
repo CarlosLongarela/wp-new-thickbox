@@ -5,10 +5,14 @@
  * Version: 1.1
  */
 
-if ( @ini_get('pcre.backtrack_limit') <= 750000 )
-	@ini_set('pcre.backtrack_limit', 750000);
-if ( @ini_get('pcre.recursion_limit') <= 250000 )
-	@ini_set('pcre.recursion_limit', 250000);
+if ( @ini_get( 'pcre.backtrack_limit' ) < 750000 ) {
+	@ini_set( 'pcre.backtrack_limit', 750000 );
+}
+
+if ( @ini_get( 'pcre.recursion_limit' ) < 250000 ) {
+	@ini_set( 'pcre.recursion_limit', 250000 );
+}
+
 
 /**
  * anchor_utils
@@ -18,7 +22,7 @@ if ( @ini_get('pcre.recursion_limit') <= 250000 )
 
 // Modificado: add static a todas las funciones
 
-class anchor_utils {
+class AnchorUtils {
 
 	/**
 	 * ob_start()
@@ -28,15 +32,16 @@ class anchor_utils {
 	static function ob_start() {
 		static $done = false;
 
-		if ( $done )
+		if ( $done ) {
 			return;
+		}
 
-		if ( has_filter('ob_filter_anchor') ) {
-			ob_start(array('anchor_utils', 'ob_filter'));
-			add_action('wp_footer', array('anchor_utils', 'ob_flush'), 10000);
+		if ( has_filter( 'ob_filter_anchor' ) ) {
+			ob_start( array( 'anchor_utils', 'ob_filter' ) );
+			add_action( 'wp_footer', array( 'anchor_utils', 'ob_flush' ), 10000 );
 			$done = true;
 		}
-	} # ob_start()
+	} // End of ob_start().
 
 	/**
 	 * ob_filter()
@@ -44,21 +49,21 @@ class anchor_utils {
 	 * @param string $text
 	 * @return string $text
 	 **/
-	static function ob_filter($text) {
+	static function ob_filter( $text ) {
 		global $escape_anchor_filter;
 		$escape_anchor_filter = array();
 
-		$text = anchor_utils::escape($text);
+		$text = anchor_utils::escape( $text );
 
-		$text = preg_replace_callback("/
+		$text = preg_replace_callback('/
 			<\s*a\s+
 			([^<>]+)
 			>
 			((?!<\s*\/\s*a\s*>).+?)
 			<\s*\/\s*a\s*>
-			/isx", array('anchor_utils', 'ob_filter_callback'), $text);
+			/isx', array( 'anchor_utils', 'ob_filter_callback' ), $text );
 
-		$text = anchor_utils::unescape($text);
+		$text = anchor_utils::unescape( $text );
 
 		return $text;
 	} # ob_filter()
@@ -71,8 +76,9 @@ class anchor_utils {
 	static function ob_flush() {
 		static $done = true;
 
-		if ( $done )
+		if ( $done ) {
 			return;
+		}
 
 		ob_end_flush();
 		$done = true;
@@ -84,23 +90,24 @@ class anchor_utils {
 	 * @param array $match
 	 * @return string $str
 	 **/
-	static function ob_filter_callback($match) {
+	static function ob_filter_callback( $match ) {
 		# skip empty anchors
-		if ( !trim($match[2]) )
+		if ( ! trim( $match[2] ) )
 			return $match[0];
 
 		# parse anchor
-		$anchor = anchor_utils::parse_anchor($match);
+		$anchor = anchor_utils::parse_anchor( $match );
 
-		if ( !$anchor )
+		if ( ! $anchor ) {
 			return $match[0];
+		}
 
 		# filter anchor
-		$anchor = apply_filters('ob_filter_anchor', $anchor);
+		$anchor = apply_filters( 'ob_filter_anchor', $anchor );
 
 		# return anchor
-		return anchor_utils::build_anchor($anchor);
-	} # ob_filter_callback()
+		return anchor_utils::build_anchor( $anchor );
+	} // End of ob_filter_callback().
 
 	/**
 	 * filter()
@@ -108,24 +115,24 @@ class anchor_utils {
 	 * @param string $text
 	 * @return string $text
 	 **/
-	static function filter($text) {
-		if ( !has_filter('filter_anchor') )
+	static function filter( $text ) {
+		if ( ! has_filter('filter_anchor') )
 			return $text;
 
 		global $escape_anchor_filter;
-		$escape_anchor_filter = array();
+		$escape_anchor_filter = array( );
 
-		$text = anchor_utils::escape($text);
+		$text = anchor_utils::escape( $text );
 
-		$text = preg_replace_callback("/
+		$text = preg_replace_callback('/
 			<\s*a\s+
 			([^<>]+)
 			>
 			((?!<\s*\/\s*a\s*>).+?)
 			<\s*\/\s*a\s*>
-			/isx", array('anchor_utils', 'filter_callback'), $text);
+			/isx', array( 'anchor_utils', 'filter_callback'), $text );
 
-		$text = anchor_utils::unescape($text);
+		$text = anchor_utils::unescape( $text );
 
 		return $text;
 	} # filter()
@@ -136,23 +143,25 @@ class anchor_utils {
 	 * @param array $match
 	 * @return string $str
 	 **/
-	static function filter_callback($match) {
-		# skip empty anchors
-		if ( !trim($match[2]) )
+	static function filter_callback( $match ) {
+		// Skip empty anchors.
+		if ( ! trim( $match[2] ) ) {
 			return $match[0];
+		}
 
-		# parse anchor
-		$anchor = anchor_utils::parse_anchor($match);
+		// Parse anchor.
+		$anchor = anchor_utils::parse_anchor( $match );
 
-		if ( !$anchor )
+		if ( ! $anchor ) {
 			return $match[0];
+		}
 
-		# filter anchor
-		$anchor = apply_filters('filter_anchor', $anchor);
+		// Filter anchor.
+		$anchor = apply_filters( 'filter_anchor', $anchor );
 
-		# return anchor
-		return anchor_utils::build_anchor($anchor);
-	} # filter_callback()
+		// Return anchor.
+		return anchor_utils::build_anchor( $anchor );
+	} // End of filter_callback().
 
 	/**
 	 * parse_anchor()
@@ -160,53 +169,55 @@ class anchor_utils {
 	 * @param array $match
 	 * @return array $anchor
 	 **/
-	static function parse_anchor($match) {
+	static function parse_anchor( $match ) {
 		$anchor = array();
-		$anchor['attr'] = anchor_utils::shortcode_parse_atts($match[1]);
+		$anchor['attr'] = anchor_utils::shortcode_parse_atts( $match[1] );
 
-		if ( !is_array($anchor['attr']) || empty($anchor['attr']['href']) # parser error or no link
-			|| $anchor['attr']['href'] != ( function_exists('esc_url') ? esc_url($anchor['attr']['href'], null, 'db') : clean_url($anchor['attr']['href'], null, 'db') ) ) # likely a script
-			return false;
+		if ( ! is_array( $anchor['attr'] ) || empty( $anchor['attr']['href'] ) // Parser error or no link.
+			|| $anchor['attr']['href'] !== ( function_exists( 'esc_url' ) ? esc_url( $anchor['attr']['href'], null, 'db' ) : clean_url( $anchor['attr']['href'], null, 'db' ) ) ) { // Likely a script.
+				return false;
+		}
 
-		foreach ( array('class', 'rel') as $attr ) {
-			if ( !isset($anchor['attr'][$attr]) ) {
-				$anchor['attr'][$attr] = array();
+		foreach ( array( 'class', 'rel' ) as $attr ) {
+			if ( ! isset( $anchor['attr'][ $attr ] ) ) {
+				$anchor['attr'][ $attr ] = array();
 			} else {
-				$anchor['attr'][$attr] = explode(' ', $anchor['attr'][$attr]);
-				$anchor['attr'][$attr] = array_map('trim', $anchor['attr'][$attr]);
+				$anchor['attr'][ $attr ] = explode( ' ', $anchor['attr'][ $attr ] );
+				$anchor['attr'][ $attr ] = array_map( 'trim', $anchor['attr'][ $attr ] );
 			}
 		}
 
 		$anchor['body'] = $match[2];
 
-		$anchor['attr']['href'] = @html_entity_decode($anchor['attr']['href'], ENT_COMPAT, get_option('blog_charset'));
+		$anchor['attr']['href'] = html_entity_decode( $anchor['attr']['href'], ENT_COMPAT, get_option( 'blog_charset' ) );
 
 		return $anchor;
-	} # parse_anchor()
+	} // End of parse_anchor().
 
 	/**
 	 * @see shortcode_parse_atts() in wp-includes/shortcodes.php
 	 * @note This function accepts custom data attributes (data-*)
 	 */
-	static function shortcode_parse_atts($text) {
+	static function shortcode_parse_atts( $text ) {
 		$atts = array();
 		$pattern = '/([\w-]+)\s*=\s*"([^"]*)"(?:\s|$)|([\w-]+)\s*=\s*\'([^\']*)\'(?:\s|$)|([\w-]+)\s*=\s*([^\s\'"]+)(?:\s|$)|"([^"]*)"(?:\s|$)|(\S+)(?:\s|$)/';
-		$text = preg_replace("/[\x{00a0}\x{200b}]+/u", " ", $text);
-		if ( preg_match_all($pattern, $text, $match, PREG_SET_ORDER) ) {
-			foreach ($match as $m) {
-				if (!empty($m[1]))
-					$atts[strtolower($m[1])] = stripcslashes($m[2]);
-				elseif (!empty($m[3]))
-					$atts[strtolower($m[3])] = stripcslashes($m[4]);
-				elseif (!empty($m[5]))
-					$atts[strtolower($m[5])] = stripcslashes($m[6]);
-				elseif (isset($m[7]) and strlen($m[7]))
-					$atts[] = stripcslashes($m[7]);
-				elseif (isset($m[8]))
-					$atts[] = stripcslashes($m[8]);
+		$text = preg_replace( "/[\x{00a0}\x{200b}]+/u", " ", $text );
+		if ( preg_match_all( $pattern, $text, $match, PREG_SET_ORDER ) ) {
+			foreach ( $match as $m ) {
+				if ( ! empty( $m[1] ) ) {
+					$atts[ strtolower( $m[1] ) ] = stripcslashes( $m[2] );
+				} elseif ( ! empty( $m[3] ) ) {
+					$atts[ strtolower( $m[3] ) ] = stripcslashes( $m[4] );
+				} elseif ( ! empty( $m[5] ) ) {
+					$atts[ strtolower( $m[5] ) ] = stripcslashes( $m[6] );
+				} elseif ( isset( $m[7] ) and strlen( $m[7] ) ) {
+					$atts[] = stripcslashes( $m[7] );
+				} elseif ( isset( $m[8] ) ) {
+					$atts[] = stripcslashes( $m[8] );
+				}
 			}
 		} else {
-			$atts = ltrim($text);
+			$atts = ltrim( $text );
 		}
 		return $atts;
 	}
@@ -217,15 +228,16 @@ class anchor_utils {
 	 * @param array $anchor
 	 * @return string $anchor
 	 **/
-	static function build_anchor($anchor) {
-		$anchor['attr']['href'] = function_exists('esc_url') ? esc_url($anchor['attr']['href']) : clean_url($anchor['attr']['href']);
+	static function build_anchor( $anchor ) {
+		$anchor['attr']['href'] = function_exists( 'esc_url' ) ? esc_url( $anchor['attr']['href'] ) : clean_url( $anchor['attr']['href'] );
 
 		$str = '<a ';
 		foreach ( $anchor['attr'] as $k => $v ) {
-			if ( is_array($v) ) {
-				$v = array_unique($v);
-				if ( $v )
-					$str .= ' ' . $k . '="' . implode(' ', $v) . '"';
+			if ( is_array( $v ) ) {
+				$v = array_unique( $v );
+				if ( $v ) {
+					$str .= ' ' . $k . '="' . implode( ' ', $v ) . '"';
+				}
 			} else {
 				$str .= ' ' . $k . '="' . $v . '"';
 			}
@@ -233,7 +245,7 @@ class anchor_utils {
 		$str .= '>' . $anchor['body'] . '</a>';
 
 		return $str;
-	} # build_anchor()
+	} // End of build_anchor().
 
 	/**
 	 * escape()
@@ -241,28 +253,29 @@ class anchor_utils {
 	 * @param string $text
 	 * @return string $text
 	 **/
-	static function escape($text) {
+	static function escape( $text ) {
 		global $escape_anchor_filter;
 
-		if ( !isset($escape_anchor_filter) )
+		if ( ! isset( $escape_anchor_filter ) ) {
 			$escape_anchor_filter = array();
+		}
 
 		foreach ( array(
-			'head' => "/
+			'head' => '/
 				.*?
 				<\s*\/\s*head\s*>
-				/isx",
+				/isx',
 			'blocks' => "/
 				<\s*(script|style|object|textarea)(?:\s.*?)?>
 				.*?
 				<\s*\/\s*\\1\s*>
 				/isx",
 			) as $regex ) {
-			$text = preg_replace_callback($regex, array('anchor_utils', 'escape_callback'), $text);
+			$text = preg_replace_callback( $regex, array( 'anchor_utils', 'escape_callback' ), $text );
 		}
 
 		return $text;
-	} # escape()
+	} // End of escape().
 
 	/**
 	 * escape_callback()
@@ -270,37 +283,37 @@ class anchor_utils {
 	 * @param array $match
 	 * @return string $text
 	 **/
-	static function escape_callback($match) {
+	static function escape_callback( $match ) {
 		global $escape_anchor_filter;
 
-		$tag_id = "----escape_anchor_utils:" . md5($match[0]) . "----";
-		$escape_anchor_filter[$tag_id] = $match[0];
+		$tag_id = '----escape_anchor_utils:' . md5( $match[0] ) . '----';
+		$escape_anchor_filter[ $tag_id ] = $match[0];
 
 		return $tag_id;
-	} # escape_callback()
+	} // End of escape_callback().
 
 	/**
-	 * unescape()
+	 * Unescape text.
 	 *
-	 * @param string $text
+	 * @param string $text Text to be unescaped.
 	 * @return string $text
 	 **/
-	static function unescape($text) {
+	static function unescape( $text ) {
 		global $escape_anchor_filter;
 
-		if ( !$escape_anchor_filter )
+		if ( ! $escape_anchor_filter ) {
 			return $text;
+		}
 
-		$unescape = array_reverse($escape_anchor_filter);
+		$unescape = array_reverse( $escape_anchor_filter );
 
-		return str_replace(array_keys($unescape), array_values($unescape), $text);
-	} # unescape()
-} # anchor_utils
+		return str_replace( array_keys( $unescape ), array_values( $unescape ), $text );
+	} // End of unescape().
+}
 
-add_filter('the_content', array('anchor_utils', 'filter'), 100);
-add_filter('the_excerpt', array('anchor_utils', 'filter'), 100);
-add_filter('widget_text', array('anchor_utils', 'filter'), 100);
-add_filter('comment_text', array('anchor_utils', 'filter'), 100);
+add_filter( 'the_content', array( 'anchor_utils', 'filter' ), 100 );
+add_filter( 'the_excerpt', array( 'anchor_utils', 'filter' ), 100 );
+add_filter( 'widget_text', array( 'anchor_utils', 'filter' ), 100 );
+add_filter( 'comment_text', array( 'anchor_utils', 'filter' ), 100 );
 
-add_action('wp_head', array('anchor_utils', 'ob_start'), 10000);
-?>
+add_action( 'wp_head', array( 'anchor_utils', 'ob_start' ), 10000 );

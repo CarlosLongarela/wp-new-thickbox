@@ -397,63 +397,127 @@ if ( 'modified' === $this->options['thickbox_type'] ) {
 
 	$keys_close = array();
 
-	if ( $this->options['key_close_esc'] == 'on' ) $keys_close[] = 27;
-	if ( $this->options['key_close_enter'] == 'on' ) $keys_close[] = 13;
-	if ( !$this->is_default_options(array('key_close_esc', 'key_close_enter')) )
-		$script .= "tb_options.keys_close = [" . implode(', ', $keys_close) . "];\n";
-	$keys_prev = $keys_prev_shift = array();
-	if ( $this->options['key_prev_angle'] == 'on' ) $keys_prev[] = 188;
-	if ( $this->options['key_prev_left'] == 'on' ) $keys_prev[] = 37;
-	if ( $this->options['key_prev_tab'] == 'on' ) $keys_prev_shift[] = 9;
-	if ( $this->options['key_prev_space'] == 'on' ) $keys_prev_shift[] = 32;
-	if ( $this->options['key_prev_bs'] == 'on' ) $keys_prev[] = 8;
-	if ( !$this->is_default_options(array('key_prev_angle', 'key_prev_left', 'key_prev_tab', 'key_prev_space', 'key_prev_bs')) ) {
-		$script .= "tb_options.keys_prev = [" . implode(', ', $keys_prev) . "];\n";
-		$script .= "tb_options.keys_prev['shift'] = [" . implode(', ', $keys_prev_shift) . "];\n";
+	if ( 'on' === $this->options['key_close_esc'] ) {
+		$keys_close[] = 27;
 	}
 
-		$keys_next = array();
-		if ( $this->options['key_next_angle'] == 'on' ) $keys_next[] = 190;
-		if ( $this->options['key_next_right'] == 'on' ) $keys_next[] = 39;
-		if ( $this->options['key_next_tab'] == 'on' ) $keys_next[] = 9;
-		if ( $this->options['key_next_space'] == 'on' ) $keys_next[] = 32;
-		if ( !$this->is_default_options(array('key_next_angle', 'key_next_right', 'key_next_tab', 'key_next_space')) )
-			$script .= "tb_options.keys_next = [" . implode(', ', $keys_next) . "];\n";
-		$keys_first = $keys_last = array();
-		if ( $this->options['key_end_home_end'] == 'on' ) { $keys_first[] = 36; $keys_last[] = 35; }
-		if ( !$this->is_default_options('key_end_home_end') ) {
-			$script .= "tb_options.keys_first = [" . implode(', ', $keys_first) . "];\n";
-			$script .= "tb_options.keys_last = [" . implode(', ', $keys_last) . "];\n";
-		}
+	if ( 'on' === $this->options['key_close_enter'] ) {
+		$keys_close[] = 13;
+	}
 
-		if ( !$this->is_default_options('position_title') )
-			$script .= "tb_options.position_title = '{$this->options['position_title']}';\n";
-		if ( !$this->is_default_options('position_cap') )
-			$script .= "tb_options.position_cap = '{$this->options['position_cap']}';\n";
+	if ( ! $this->is_default_options( array( 'key_close_esc', 'key_close_enter' ) ) ) {
+		$script .= 'tb_options.keys_close = [' . implode( ', ', $keys_close ) . "];\n";
+	}
 
-		if ( !$this->is_default_options('mobile_support') )
-			$script .= "tb_options.mobile_support = '{$this->options['mobile_support']}';\n";
-		if ( !$this->is_default_options('small_width') )
-			$script .= "tb_options.small_width = {$this->options['small_width']};\n";
-		if ( !$this->is_default_options('small_height') )
-			$script .= "tb_options.small_height = {$this->options['small_height']};\n";
-		if ( !$this->is_default_options('win_width') )
-			$script .= "tb_options.win_width = {$this->options['win_width']};\n";
-		if ( !$this->is_default_options('win_height') )
-			$script .= "tb_options.win_height = {$this->options['win_height']};\n";
-		if ( !$this->is_default_options('margin_win_img') )
-			$script .= "tb_options.margin_win_img = {$this->options['margin_win_img']};\n";
-		if ( !$this->is_default_options('margin_win_html') )
-			$script .= "tb_options.margin_win_html = {$this->options['margin_win_html']};\n";
+	$keys_prev = $keys_prev_shift = array();
 
-		if ( !$this->is_default_options('ref_title') )
-			$script .= "tb_options.ref_title = [{$this->options['ref_title']}];\n";
-		if ( !$this->is_default_options('ref_cap') )
-			$script .= "tb_options.ref_cap = [{$this->options['ref_cap']}];\n";
+	if ( 'on' === $this->options['key_prev_angle'] ) {
+		$keys_prev[] = 188;
+	}
 
-		if ($script)
-			echo "// Options for ThickBox Plus\n{$script}";
-		}
+	if ( 'on' === $this->options['key_prev_left'] ) {
+		$keys_prev[] = 37;
+	}
+
+	if ( 'on' === $this->options['key_prev_tab'] ) {
+		$keys_prev_shift[] = 9;
+	}
+
+	if ( 'on' === $this->options['key_prev_space'] ) {
+		$keys_prev_shift[] = 32;
+	}
+
+	if ( 'on' === $this->options['key_prev_bs'] ) {
+		$keys_prev[] = 8;
+	}
+
+	if ( ! $this->is_default_options( array( 'key_prev_angle', 'key_prev_left', 'key_prev_tab', 'key_prev_space', 'key_prev_bs' ) ) ) {
+		$script .= 'tb_options.keys_prev = [' . implode( ', ', $keys_prev ) . "];\n";
+		$script .= "tb_options.keys_prev['shift'] = [" . implode( ', ', $keys_prev_shift ) . "];\n";
+	}
+
+	$keys_next = array();
+
+	if ( 'on' === $this->options['key_next_angle'] ) {
+		$keys_next[] = 190;
+	}
+
+	if ( 'on' === $this->options['key_next_right'] ) {
+		$keys_next[] = 39;
+	}
+
+	if ( 'on' === $this->options['key_next_tab'] ) {
+		$keys_next[] = 9;
+	}
+
+	if ( 'on' === $this->options['key_next_space'] ) {
+		$keys_next[] = 32;
+	}
+
+	if ( ! $this->is_default_options( array( 'key_next_angle', 'key_next_right', 'key_next_tab', 'key_next_space' ) ) ) {
+		$script .= 'tb_options.keys_next = [' . implode( ', ', $keys_next ) . "];\n";
+	}
+
+	$keys_first = $keys_last = array();
+
+	if ( 'on' === $this->options['key_end_home_end'] ) {
+		$keys_first[] = 36;
+		$keys_last[] = 35;
+	}
+
+	if ( ! $this->is_default_options( 'key_end_home_end' ) ) {
+		$script .= 'tb_options.keys_first = [' . implode( ', ', $keys_first ) . "];\n";
+		$script .= 'tb_options.keys_last = [' . implode( ', ', $keys_last ) . "];\n";
+	}
+
+	if ( ! $this->is_default_options( 'position_title' ) ) {
+		$script .= "tb_options.position_title = '{$this->options['position_title']}';\n";
+	}
+
+	if ( ! $this->is_default_options( 'position_cap' ) ) {
+		$script .= "tb_options.position_cap = '{$this->options['position_cap']}';\n";
+	}
+
+	if ( ! $this->is_default_options( 'mobile_support' ) ) {
+		$script .= "tb_options.mobile_support = '{$this->options['mobile_support']}';\n";
+	}
+
+	if ( ! $this->is_default_options( 'small_width' ) ) {
+		$script .= "tb_options.small_width = {$this->options['small_width']};\n";
+	}
+
+	if ( ! $this->is_default_options( 'small_height' ) ) {
+		$script .= "tb_options.small_height = {$this->options['small_height']};\n";
+	}
+
+	if ( ! $this->is_default_options( 'win_width' ) ) {
+		$script .= "tb_options.win_width = {$this->options['win_width']};\n";
+	}
+
+	if ( ! $this->is_default_options( 'win_height' ) ) {
+		$script .= "tb_options.win_height = {$this->options['win_height']};\n";
+	}
+
+	if ( ! $this->is_default_options( 'margin_win_img' ) ) {
+		$script .= "tb_options.margin_win_img = {$this->options['margin_win_img']};\n";
+	}
+
+	if ( ! $this->is_default_options( 'margin_win_html' ) ) {
+		$script .= "tb_options.margin_win_html = {$this->options['margin_win_html']};\n";
+	}
+
+	if ( ! $this->is_default_options( 'ref_title' ) ) {
+		$script .= "tb_options.ref_title = [{$this->options['ref_title']}];\n";
+	}
+
+	if ( ! $this->is_default_options( 'ref_cap' ) ) {
+		$script .= "tb_options.ref_cap = [{$this->options['ref_cap']}];\n";
+	}
+
+	if ( $script ) {
+		echo "// Options for WP New ThickBox\n{$script}";
+	}
+}
 ?>
 /* ]]> */
 </script>
@@ -652,7 +716,7 @@ if ( 'modified' === $this->options['thickbox_type'] ) {
 
 		if ( !is_admin() && isset($_SERVER['HTTP_USER_AGENT']) &&
 			strpos($_SERVER['HTTP_USER_AGENT'], 'W3C_Validator') === false) {
-			if ( $this->options['auto_thickbox'] == 'filter' && !class_exists('anchor_utils') )
+			if ( $this->options['auto_thickbox'] == 'filter' && !class_exists('AnchorUtils') )
 				include dirname(__FILE__) . '/anchor-utils/anchor-utils.php';
 
 			add_action('wp_print_scripts', array(&$this, 'scripts'));

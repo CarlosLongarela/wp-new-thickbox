@@ -5,44 +5,45 @@
  * Carlos Longarela <carlos@longarela.eu>, 2017.
  */
 
-class auto_thickbox_options {
+class WPNewThickboxOptions {
 
-	// Auto ThickBox Plus Options
 	function register_options_page() {
-		add_options_page( 'WP New ThickBox' . $this->util->__( 'Settings' ), 'WP New ThickBox', 'manage_options', 'wp-new-thickbox', array( &$this, 'options_page' ) );
-		add_meta_box( 'general-box', $this->util->__('General'), array(&$this, 'general_metabox'), $this->settings_page_type, 'normal' );
-		add_meta_box( 'action-box', $this->util->__('Action', 'Actions'), array(&$this, 'action_metabox'), $this->settings_page_type, 'normal' );
-		add_meta_box( 'view-box', ucfirst($this->util->__('View', 'view')), array(&$this, 'view_metabox'), $this->settings_page_type, 'normal' );
-		add_meta_box( 'text-box', $this->util->__('Text'), array(&$this, 'text_metabox'), $this->settings_page_type, 'normal' );
-		add_meta_box( 'image-box', $this->texts['image'], array(&$this, 'image_metabox'), $this->settings_page_type, 'normal' );
-		add_meta_box( 'effect-box', $this->util->__('Effect') . ' (' . $this->util->__('beta') . ')', array(&$this, 'effect_metabox'), $this->settings_page_type, 'normal' );
-		add_meta_box( 'about-box', $this->util->__('About'), array(&$this, 'about_metabox'), $this->settings_page_type, 'normal' );
+		add_options_page( 'WP New ThickBox' . __( 'Settings', 'wp-new-thickbox' ), 'WP New ThickBox', 'manage_options', 'wp-new-thickbox', array( &$this, 'options_page' ) );
+		add_meta_box( 'general-box', __( 'General', 'wp-new-thickbox' ), array( &$this, 'general_metabox' ), $this->settings_page_type, 'normal' );
+		add_meta_box( 'action-box', __( 'Action', 'wp-new-thickbox' ), array( &$this, 'action_metabox' ), $this->settings_page_type, 'normal' );
+		add_meta_box( 'view-box', ucfirst( __( 'View', 'wp-new-thickbox' ) ), array( &$this, 'view_metabox' ), $this->settings_page_type, 'normal' );
+		add_meta_box( 'text-box', __( 'Text', 'wp-new-thickbox' ), array( &$this, 'text_metabox' ), $this->settings_page_type, 'normal' );
+		add_meta_box( 'image-box', $this->texts['image'], array( &$this, 'image_metabox' ), $this->settings_page_type, 'normal' );
+		add_meta_box( 'effect-box', __( 'Effect', 'wp-new-thickbox' ) . ' (' . __( 'beta', 'wp-new-thickbox' ) . ')', array( &$this, 'effect_metabox' ), $this->settings_page_type, 'normal' );
+		add_meta_box( 'about-box', __( 'About', 'wp-new-thickbox' ), array( &$this, 'about_metabox' ), $this->settings_page_type, 'normal' );
 		if ( isset( $_SERVER['HTTP_REFERER'] ) && strpos( $_SERVER['HTTP_REFERER'], 'post_id=' . $this->options['post_id']) !== false ) {
 			add_filter( 'gettext', array( &$this, 'replace_insert_button' ), 20, 3 );
-			register_post_type( 'wp-new-thickbox', array( 'label' => 'WP New ThickBox') );
+			register_post_type( 'wp-new-thickbox', array( 'label' => 'WP New ThickBox' ) );
 		}
 	}
 
-	function replace_insert_button($translated_text, $text, $domain) {
-		return $text == 'Insert into Post' ? $this->util->__('Insert Image', 'Insert an Image', 'Insert') : $translated_text;
+	function replace_insert_button( $translated_text, $text, $domain ) {
+		return 'Insert into Post' === $text ? __( 'Insert Image', 'wp-new-thickbox' ) : $translated_text;
 	}
 
 	function register_scripts() {
-		$this->has_slider = function_exists('wp_script_is') && wp_script_is('jquery-ui-slider', 'registered');
-		$deps = array('postbox', 'farbtastic', 'thickbox', 'media-upload');
-		if ($this->has_slider) $deps[] = 'jquery-ui-slider';
-		wp_enqueue_script('auto-thickbox', $this->util->plugins_url('auto-thickbox.js'), $deps, WP_NEW_THICKBOX_VER, true);
+		$this->has_slider = function_exists( 'wp_script_is' ) && wp_script_is( 'jquery-ui-slider', 'registered' );
+		$deps = array( 'postbox', 'farbtastic', 'thickbox', 'media-upload' );
+		if ( $this->has_slider ) {
+			$deps[] = 'jquery-ui-slider';
+		}
+		wp_enqueue_script( 'auto-thickbox', $this->util->plugins_url( 'auto-thickbox.js' ), $deps, WP_NEW_THICKBOX_VER, true );
 	}
 
 	function register_styles() {
-		wp_enqueue_style('auto-thickbox', $this->util->plugins_url('auto-thickbox.css'), array('farbtastic', 'thickbox'), WP_NEW_THICKBOX_VER);
+		wp_enqueue_style( 'auto-thickbox', $this->util->plugins_url( 'auto-thickbox.css' ), array( 'farbtastic', 'thickbox' ), WP_NEW_THICKBOX_VER );
 	}
 
 	function options_page() {
 ?>
 <div class="wrap">
 	<?php screen_icon(); ?>
-	<h2>WP New ThickBox <?php $this->util->_e('Settings'); ?></h2>
+	<h2>WP New ThickBox <?php _e( 'Settings', 'wp-new-thickbox' ); ?></h2>
 	<form method="post" action="options.php" name="form" novalidate>
 	<?php settings_fields( $this->option_group ); ?>
 		<div id="poststuff" class="metabox-holder">
@@ -53,8 +54,8 @@ class auto_thickbox_options {
 		?>
 		</div>
 		<p class="submit">
-			<input type="submit" class="button-primary" value="<?php $this->util->_e('Save Changes') ?>" />
-			<input type="submit" class="button-primary" value="<?php $this->util->_e('Reset') ?>" name="reset" />
+			<input type="submit" class="button-primary" value="<?php _e('Save Changes', 'wp-new-thickbox' ) ?>" />
+			<input type="submit" class="button-primary" value="<?php _e('Reset', 'wp-new-thickbox' ) ?>" name="reset" />
 		</p>
 	</form>
 </div>
@@ -62,98 +63,98 @@ class auto_thickbox_options {
 	}
 
 	function general_metabox() {
-		$builtin_thickbox = $this->options['thickbox_type'] == 'built-in';
+		$builtin_thickbox = 'built-in' === $this->options['thickbox_type'];
 ?>
 <table class="form-table">
 	<tr>
-		<th scope="row"><?php $this->util->_e( 'Display Style' ); ?></th>
+		<th scope="row"><?php _e( 'Display Style', 'wp-new-thickbox' ); ?></th>
 		<td>
-			<label><input type="radio" name="wp-new-thickbox[thickbox_style]" value="single"<?php $this->util->checked($this->options['thickbox_style'], 'single'); ?> />
-			<?php $this->util->_e('Single Image'); ?></label>
-			(<a href="<?php echo $this->util->plugins_url('screenshot-1.jpg'); ?>" class="thickbox-image" title="<?php $this->util->_e('Single Image'); ?>"><?php $this->util->_e('Preview'); ?></a>)
+			<label><input type="radio" name="wp-new-thickbox[thickbox_style]" value="single"<?php $this->util->checked( $this->options['thickbox_style'], 'single' ); ?> />
+			<?php _e( 'Single Image', 'wp-new-thickbox' ); ?></label>
+			(<a href="<?php echo $this->util->plugins_url( 'screenshot-1.jpg' ); ?>" class="thickbox-image" title="<?php _e ('Single Image', 'wp-new-thickbox' ); ?>"><?php _e( 'Preview', 'wp-new-thickbox' ); ?></a>)
 			<label class="boundary"><input type="radio" name="wp-new-thickbox[thickbox_style]" value="gallery"<?php $this->util->checked($this->options['thickbox_style'], 'gallery'); ?> />
-			<?php $this->util->_e('Gallery Images'); ?></label>
-			(<a href="<?php echo $this->util->plugins_url('screenshot-2.jpg'); ?>" class="thickbox-image" title="<?php $this->util->_e('Gallery Images'); ?>" rel="gallery"><?php $this->util->_e('Preview'); ?></a>)
+			<?php _e( 'Gallery Images', 'wp-new-thickbox' ); ?></label>
+			(<a href="<?php echo $this->util->plugins_url('screenshot-2.jpg'); ?>" class="thickbox-image" title="<?php _e ('Gallery Images', 'wp-new-thickbox'); ?>" rel="gallery"><?php _e( 'Preview', 'wp-new-thickbox'); ?></a>)
 		</td>
 	</tr>
 	<tr>
 		<th scope="row"></th>
 		<td>
-			<label><input type="checkbox" name="wp-new-thickbox[wp_gallery]"<?php $this->util->checked($this->options['wp_gallery'], 'on'); ?> />
-			<?php $this->util->_e('Set a different gallery-id for each WordPress Gallery'); ?> (<code>[gallery link="file"]</code>)</label>
+			<label><input type="checkbox" name="wp-new-thickbox[wp_gallery]"<?php $this->util->checked( $this->options['wp_gallery'], 'on' ); ?> />
+			<?php _e('Set a different gallery-id for each WordPress Gallery', 'wp-new-thickbox'); ?> (<code>[gallery link="file"]</code>)</label>
 		</td>
 	</tr>
 	<tr>
-		<th scope="row"><?php $this->util->_e('Auto ThickBox'); ?></th>
+		<th scope="row"><?php _e( 'Auto ThickBox', 'wp-new-thickbox' ); ?></th>
 		<td>
-			<label><input type="radio" name="wp-new-thickbox[auto_thickbox]" value="filter"<?php $this->util->checked($this->options['auto_thickbox'], 'filter'); ?> />
-			<?php $this->util->_e('WordPress Filters'); ?> (<?php echo $this->texts['content_etc']; ?>)</label><br />
-			<label><input type="radio" name="wp-new-thickbox[auto_thickbox]" value="js"<?php $this->util->checked($this->options['auto_thickbox'], 'js'); ?> />
-			<?php $this->util->_e('JavaScript'); ?> (<?php $this->util->_e('Whole Page'); ?>)</label><br />
-			<label><input type="radio" name="wp-new-thickbox[auto_thickbox]" value="disabled"<?php $this->util->checked($this->options['auto_thickbox'], 'disabled'); ?> />
-			<?php $this->util->_e('Disabled'); ?></label>
+			<label><input type="radio" name="wp-new-thickbox[auto_thickbox]" value="filter"<?php $this->util->checked( $this->options['auto_thickbox'], 'filter' ); ?> />
+			<?php _e( 'WordPress Filters', 'wp-new-thickbox' ); ?> (<?php echo $this->texts['content_etc']; ?>)</label><br />
+			<label><input type="radio" name="wp-new-thickbox[auto_thickbox]" value="js"<?php $this->util->checked( $this->options['auto_thickbox'], 'js' ); ?> />
+			<?php _e( 'JavaScript', 'wp-new-thickbox' ); ?> (<?php _e( 'Whole Page', 'wp-new-thickbox' ); ?>)</label><br />
+			<label><input type="radio" name="wp-new-thickbox[auto_thickbox]" value="disabled"<?php $this->util->checked( $this->options['auto_thickbox'], 'disabled' ); ?> />
+			<?php _e( 'Disabled', 'wp-new-thickbox' ); ?></label>
 		</td>
 	</tr>
 	<tr>
 		<th scope="row"></th>
 		<td>
-			<label><input type="checkbox" name="wp-new-thickbox[thickbox_img]"<?php $this->util->checked($this->options['thickbox_img'], 'on'); ?> />
-			<?php $this->util->_e('Image links to images'); ?> (<code>&lt;a href="image">&lt;img src="thumbnail" />&lt;/a></code>)</label><br />
-			<label><input type="checkbox" name="wp-new-thickbox[thickbox_text]"<?php $this->util->checked($this->options['thickbox_text'], 'on'); ?> />
-			<?php $this->util->_e('Text links to images'); ?> (<code>&lt;a href="image">Text&lt;/a></code>)</label><br />
-			<label><input type="checkbox" name="wp-new-thickbox[thickbox_target]"<?php $this->util->checked($this->options['thickbox_target'], 'on'); ?> />
-			<?php $this->util->_e('Links with target attribute'); ?> (<code>&lt;a target="_blank"></code>)</label>
+			<label><input type="checkbox" name="wp-new-thickbox[thickbox_img]"<?php $this->util->checked( $this->options['thickbox_img'], 'on' ); ?> />
+			<?php _e( 'Image links to images', 'wp-new-thickbox' ); ?> (<code>&lt;a href="image">&lt;img src="thumbnail" />&lt;/a></code>)</label><br />
+			<label><input type="checkbox" name="wp-new-thickbox[thickbox_text]"<?php $this->util->checked( $this->options['thickbox_text'], 'on' ); ?> />
+			<?php _e( 'Text links to images', 'wp-new-thickbox' ); ?> (<code>&lt;a href="image">Text&lt;/a></code>)</label><br />
+			<label><input type="checkbox" name="wp-new-thickbox[thickbox_target]"<?php $this->util->checked( $this->options['thickbox_target'], 'on' ); ?> />
+			<?php _e( 'Links with target attribute'); ?> (<code>&lt;a target="_blank"></code>)</label>
 		</td>
 	</tr>
 	<tr>
-		<th scope="row"><?php $this->util->_e('No ThickBox'); ?></th>
+		<th scope="row"><?php _e( 'No ThickBox', 'wp-new-thickbox' ); ?></th>
 		<td>
 			<label><input type="text" name="wp-new-thickbox[no_thickbox]" value="<?php echo $this->options['no_thickbox']; ?>" class="regular-text" /><br />
-			<?php $this->util->_e('* Input class attribute values separated by spaces'); ?> (<code>&lt;a class="nothickbox"></code>)</label>
+			<?php _e( '* Input class attribute values separated by spaces', 'wp-new-thickbox' ); ?> (<code>&lt;a class="nothickbox"></code>)</label>
 		</td>
 	</tr>
 	<tr>
-		<th scope="row"><?php $this->util->_e('Auto Resize'); ?></th>
+		<th scope="row"><?php _e( 'Auto Resize', 'wp-new-thickbox'); ?></th>
 		<td>
-			<label class="item"><input type="checkbox" name="wp-new-thickbox[auto_resize_img]"<?php $this->util->checked($this->options['auto_resize_img'], 'on'); ?> />
+			<label class="item"><input type="checkbox" name="wp-new-thickbox[auto_resize_img]"<?php $this->util->checked( $this->options['auto_resize_img'], 'on' ); ?> />
 			<?php echo $this->texts['image']; ?></label>
-			<label class="item"><input type="checkbox" name="wp-new-thickbox[auto_resize_html]"<?php $this->util->checked($this->options['auto_resize_html'], 'on'); ?> />
+			<label class="item"><input type="checkbox" name="wp-new-thickbox[auto_resize_html]"<?php $this->util->checked( $this->options['auto_resize_html'], 'on' ); ?> />
 			HTML</label>
 		</td>
 	</tr>
 	<tr>
-		<th scope="row"><?php $this->util->_e('ThickBox Resources'); ?></th>
+		<th scope="row"><?php _e( 'ThickBox Resources', 'wp-new-thickbox' ); ?></th>
 		<td>
 			<select name="wp-new-thickbox[thickbox_type]" onchange="disablePlaceOption(this)">
-				<option value="modified"<?php selected(!$builtin_thickbox); ?>><?php $this->util->_e('Modified ThickBox'); ?></option>
-				<option value="built-in"<?php selected($builtin_thickbox); ?>><?php $this->util->_e('Built-in ThickBox'); ?></option>
+				<option value="modified"<?php selected( ! $builtin_thickbox ); ?>><?php _e( 'Modified ThickBox', 'wp-new-thickbox' ); ?></option>
+				<option value="built-in"<?php selected( $builtin_thickbox ); ?>><?php _e( 'Built-in ThickBox', 'wp-new-thickbox' ); ?></option>
 			</select>
 		</td>
 	</tr>
 	<tr>
 		<th scope="row"></th>
 		<td>
-			<label class="item"><input type="radio" name="wp-new-thickbox[script_place]" value="header"<?php $this->util->checked($this->options['script_place'], 'header'); $this->util->disabled($builtin_thickbox); ?> />
-			<?php $this->util->_e('Header'); ?></label>
-			<label class="item"><input type="radio" name="wp-new-thickbox[script_place]" value="footer"<?php $this->util->checked($this->options['script_place'], 'footer'); $this->util->disabled($builtin_thickbox); ?> />
-			<?php $this->util->_e('Footer'); ?></label>
+			<label class="item"><input type="radio" name="wp-new-thickbox[script_place]" value="header"<?php $this->util->checked( $this->options['script_place'], 'header' ); $this->util->disabled( $builtin_thickbox ); ?> />
+			<?php _e( 'Header', 'wp-new-thickbox' ); ?></label>
+			<label class="item"><input type="radio" name="wp-new-thickbox[script_place]" value="footer"<?php $this->util->checked( $this->options['script_place'], 'footer' ); $this->util->disabled( $builtin_thickbox ); ?> />
+			<?php _e( 'Footer', 'wp-new-thickbox' ); ?></label>
 		</td>
 	</tr>
 	<tr>
-		<th scope="row"><?php $this->util->_e('Mobile Support'); ?> (<?php $this->util->_e('beta'); ?>)</th>
+		<th scope="row"><?php _e( 'Mobile Support', 'wp-new-thickbox' ); ?> (<?php _e( 'beta', 'wp-new-thickbox' ); ?>)</th>
 		<td>
-			<label class="item"><input type="radio" name="wp-new-thickbox[mobile_support]" value="no_margin"<?php $this->util->checked($this->options['mobile_support'], 'no_margin'); ?> />
-			<?php $this->util->_e('No Window Margin'); ?></label>
-			<label class="item"><input type="radio" name="wp-new-thickbox[mobile_support]" value="no_thickbox"<?php $this->util->checked($this->options['mobile_support'], 'no_thickbox'); ?> />
-			<?php $this->util->_e('No ThickBox'); ?></label>
+			<label class="item"><input type="radio" name="wp-new-thickbox[mobile_support]" value="no_margin"<?php $this->util->checked( $this->options['mobile_support'], 'no_margin' ); ?> />
+			<?php _e( 'No Window Margin', 'wp-new-thickbox' ); ?></label>
+			<label class="item"><input type="radio" name="wp-new-thickbox[mobile_support]" value="no_thickbox"<?php $this->util->checked( $this->options['mobile_support'], 'no_thickbox' ); ?> />
+			<?php _e( 'No ThickBox', 'wp-new-thickbox' ); ?></label>
 		</td>
 	</tr>
 	<tr>
 		<th scope="row"></th>
 		<td>
-			<label class="item"><?php $this->util->_e('Width'); ?>
+			<label class="item"><?php _e( 'Width', 'wp-new-thickbox' ); ?>
 			<input type="number" min="0" step="10" name="wp-new-thickbox[small_width]" value="<?php echo $this->options['small_width']; ?>" class="small-text" /> px</label>
-			<label class="item boundary"><?php $this->util->_e('Height'); ?>
+			<label class="item boundary"><?php _e( 'Height', 'wp-new-thickbox' ); ?>
 			<input type="number" min="0" step="10" name="wp-new-thickbox[small_height]" value="<?php echo $this->options['small_height']; ?>" class="small-text" /> px</label>
 		</td>
 	</tr>
@@ -162,49 +163,49 @@ class auto_thickbox_options {
 	}
 
 	function action_metabox() {
-		$click_end_disabled = !in_array($this->options['click_img'], array('next', 'prev_next'));
-		$click_range_disabled = $this->options['click_img'] != 'prev_next';
+		$click_end_disabled = ! in_array( $this->options['click_img'], array( 'next', 'prev_next' ) );
+		$click_range_disabled = 'prev_next' !== $this->options['click_img'];
 ?>
 <table class="form-table">
 	<tr>
-		<th scope="row"><?php $this->util->_e('Mouse Click'); ?></th>
+		<th scope="row"><?php_e( 'Mouse Click', 'wp-new-thickbox' ); ?></th>
 		<th scope="row"><?php echo $this->texts['image']; ?></th>
 		<td>
-			<label class="item"><input type="radio" name="wp-new-thickbox[click_img]" value="close"<?php $this->util->checked($this->options['click_img'], 'close'); ?> onclick="disableClickOption(this)" />
+			<label class="item"><input type="radio" name="wp-new-thickbox[click_img]" value="close"<?php $this->util->checked( $this->options['click_img'], 'close' ); ?> onclick="disableClickOption(this)" />
 			<?php echo $this->texts['close']; ?></label>
-			<label class="item"><input type="radio" name="wp-new-thickbox[click_img]" value="none"<?php $this->util->checked($this->options['click_img'], 'none'); ?> onclick="disableClickOption(this)" />
+			<label class="item"><input type="radio" name="wp-new-thickbox[click_img]" value="none"<?php $this->util->checked( $this->options['click_img'], 'none' ); ?> onclick="disableClickOption(this)" />
 			<?php echo $this->texts['none']; ?></label>
-			<label class="item"><input type="radio" name="wp-new-thickbox[click_img]" value="next"<?php $this->util->checked($this->options['click_img'], 'next'); ?> onclick="disableClickOption(this)" />
+			<label class="item"><input type="radio" name="wp-new-thickbox[click_img]" value="next"<?php $this->util->checked( $this->options['click_img'], 'next' ); ?> onclick="disableClickOption(this)" />
 			<?php echo $this->texts['next2']; ?></label>
 			<label class="item"><input type="radio" name="wp-new-thickbox[click_img]" value="prev_next"<?php $this->util->checked($this->options['click_img'], 'prev_next'); ?> onclick="disableClickOption(this)" />
 			<?php echo "{$this->texts['prev2']} / {$this->texts['next2']}"; ?></label>
-			<label class="item"><input type="radio" name="wp-new-thickbox[click_img]" value="open"<?php $this->util->checked($this->options['click_img'], 'open'); ?> onclick="disableClickOption(this)" />
+			<label class="item"><input type="radio" name="wp-new-thickbox[click_img]" value="open"<?php $this->util->checked( $this->options['click_img'], 'open' ); ?> onclick="disableClickOption(this)" />
 			<?php echo $this->texts['open']; ?></label>
-			<label class="item"><input type="radio" name="wp-new-thickbox[click_img]" value="download"<?php $this->util->checked($this->options['click_img'], 'download'); ?> onclick="disableClickOption(this)" />
-			<?php $this->util->_e('Download'); ?> (<?php $this->util->_e('beta'); ?>)</label>
+			<label class="item"><input type="radio" name="wp-new-thickbox[click_img]" value="download"<?php $this->util->checked( $this->options['click_img'], 'download' ); ?> onclick="disableClickOption(this)" />
+			<?php _e( 'Download', 'wp-new-thickbox' ); ?> (<?php _e( 'beta', 'wp-new-thickbox' ); ?>)</label>
 			<label class="item"><input type="radio" name="wp-new-thickbox[click_img]" value="expand_shrink"<?php $this->util->checked($this->options['click_img'], 'expand_shrink'); ?> onclick="disableClickOption(this)" />
-			<?php $this->util->_e('Expand'); ?> / <?php $this->util->_e('Shrink'); ?></label>
+			<?php _e( 'Expand', 'wp-new-thickbox' ); ?> / <?php _e( 'Shrink', 'wp-new-thickbox' ); ?></label>
 		</td>
 	</tr>
 	<tr>
 		<th scope="row"></th>
 		<th scope="row"><?php echo "{$this->texts['image']} ({$this->texts['first2']} / {$this->texts['last2']})"; ?></th>
 		<td>
-			<label class="item"><input type="radio" name="wp-new-thickbox[click_end]" value="close"<?php $this->util->checked($this->options['click_end'], 'close'); $this->util->disabled($click_end_disabled); ?> />
+			<label class="item"><input type="radio" name="wp-new-thickbox[click_end]" value="close"<?php $this->util->checked( $this->options['click_end'], 'close' ); $this->util->disabled( $click_end_disabled ); ?> />
 			<?php echo $this->texts['close']; ?></label>
-			<label class="item"><input type="radio" name="wp-new-thickbox[click_end]" value="none"<?php $this->util->checked($this->options['click_end'], 'none'); $this->util->disabled($click_end_disabled); ?> />
+			<label class="item"><input type="radio" name="wp-new-thickbox[click_end]" value="none"<?php $this->util->checked( $this->options['click_end'], 'none' ); $this->util->disabled( $click_end_disabled ); ?> />
 			<?php echo $this->texts['none']; ?></label>
-			<label class="item"><input type="radio" name="wp-new-thickbox[click_end]" value="loop"<?php $this->util->checked($this->options['click_end'], 'loop'); $this->util->disabled($click_end_disabled); ?> />
-			<?php $this->util->_e('Loop'); ?></label>
+			<label class="item"><input type="radio" name="wp-new-thickbox[click_end]" value="loop"<?php $this->util->checked( $this->options['click_end'], 'loop' ); $this->util->disabled( $click_end_disabled ); ?> />
+			<?php _e( 'Loop', 'wp-new-thickbox' ); ?></label>
 		</td>
 	</tr>
 	<tr>
 		<th scope="row"></th>
-		<th scope="row"><?php $this->util->_e('Clickable Range'); ?></th>
+		<th scope="row"><?php _e( 'Clickable Range', 'wp-new-thickbox' ); ?></th>
 		<td class="slider">
-			<input type="number" min="0" max="50" step="5" name="wp-new-thickbox[click_range]" value="<?php echo $this->options['click_range']; ?>" id="click-range" class="small-text"<?php $this->util->disabled($click_range_disabled); ?> />
+			<input type="number" min="0" max="50" step="5" name="wp-new-thickbox[click_range]" value="<?php echo $this->options['click_range']; ?>" id="click-range" class="small-text"<?php $this->util->disabled( $click_range_disabled ); ?> />
 			<span>%</span>
-			<?php if ($this->has_slider): ?>
+			<?php if ( $this->has_slider ): ?>
 				<div id="click-range-slider"></div>
 			<?php else: ?>
 				<span>[0 - 50]</span>
@@ -214,65 +215,65 @@ class auto_thickbox_options {
 	</tr>
 	<tr>
 		<th scope="row"></th>
-		<th scope="row"><?php $this->util->_e('Background'); ?></th>
+		<th scope="row"><?php _e( 'Background', 'wp-new-thickbox' ); ?></th>
 		<td>
-			<label class="item"><input type="radio" name="wp-new-thickbox[click_bg]" value="close"<?php $this->util->checked($this->options['click_bg'], 'close'); ?> />
+			<label class="item"><input type="radio" name="wp-new-thickbox[click_bg]" value="close"<?php $this->util->checked( $this->options['click_bg'], 'close' ); ?> />
 			<?php echo $this->texts['close']; ?></label>
-			<label class="item"><input type="radio" name="wp-new-thickbox[click_bg]" value="none"<?php $this->util->checked($this->options['click_bg'], 'none'); ?> />
+			<label class="item"><input type="radio" name="wp-new-thickbox[click_bg]" value="none"<?php $this->util->checked( $this->options['click_bg'], 'none' ); ?> />
 			<?php echo $this->texts['none']; ?></label>
 		</td>
 	</tr>
 	<tr>
-		<th scope="row"><?php $this->util->_e('Mouse Wheel'); ?></th>
+		<th scope="row"><?php _e( 'Mouse Wheel', 'wp-new-thickbox' ); ?></th>
 		<th scope="row"><?php echo $this->texts['image']; ?></th>
 		<td>
-			<label class="item"><input type="radio" name="wp-new-thickbox[wheel_img]" value="prev_next"<?php $this->util->checked($this->options['wheel_img'], 'prev_next'); ?> />
+			<label class="item"><input type="radio" name="wp-new-thickbox[wheel_img]" value="prev_next"<?php $this->util->checked( $this->options['wheel_img'], 'prev_next' ); ?> />
 			<?php echo "{$this->texts['prev2']} / {$this->texts['next2']}"; ?></label>
-			<label class="item"><input type="radio" name="wp-new-thickbox[wheel_img]" value="scale"<?php $this->util->checked($this->options['wheel_img'], 'scale'); ?> />
-			<?php $this->util->_e('Scale'); ?></label>
-			<label class="item"><input type="radio" name="wp-new-thickbox[wheel_img]" value="scroll"<?php $this->util->checked($this->options['wheel_img'], 'scroll'); ?> />
-			<?php $this->util->_e('Scroll'); ?></label>
-			<label class="item"><input type="radio" name="wp-new-thickbox[wheel_img]" value="none"<?php $this->util->checked($this->options['wheel_img'], 'none'); ?> />
+			<label class="item"><input type="radio" name="wp-new-thickbox[wheel_img]" value="scale"<?php $this->util->checked( $this->options['wheel_img'], 'scale' ); ?> />
+			<?php _e( 'Scale', 'wp-new-thickbox'); ?></label>
+			<label class="item"><input type="radio" name="wp-new-thickbox[wheel_img]" value="scroll"<?php $this->util->checked( $this->options['wheel_img'], 'scroll' ); ?> />
+			<?php _e( 'Scroll', 'wp-new-thickbox'); ?></label>
+			<label class="item"><input type="radio" name="wp-new-thickbox[wheel_img]" value="none"<?php $this->util->checked( $this->options['wheel_img'], 'none' ); ?> />
 			<?php echo $this->texts['none']; ?></label>
 		</td>
 	</tr>
 	<tr>
 		<th scope="row"></th>
-		<th scope="row"><?php $this->util->_e('Background'); ?></th>
+		<th scope="row"><?php _e( 'Background', 'wp-new-thickbox'); ?></th>
 		<td>
-			<label class="item"><input type="radio" name="wp-new-thickbox[wheel_bg]" value="scroll"<?php $this->util->checked($this->options['wheel_bg'], 'scroll'); ?> />
-			<?php $this->util->_e('Scroll'); ?></label>
-			<label class="item"><input type="radio" name="wp-new-thickbox[wheel_bg]" value="none"<?php $this->util->checked($this->options['wheel_bg'], 'none'); ?> />
+			<label class="item"><input type="radio" name="wp-new-thickbox[wheel_bg]" value="scroll"<?php $this->util->checked( $this->options['wheel_bg'], 'scroll' ); ?> />
+			<?php _e( 'Scroll', 'wp-new-thickbox' ); ?></label>
+			<label class="item"><input type="radio" name="wp-new-thickbox[wheel_bg]" value="none"<?php $this->util->checked( $this->options['wheel_bg'], 'none' ); ?> />
 			<?php echo $this->texts['none']; ?></label>
 		</td>
 	</tr>
 	<tr>
-		<th scope="row"><?php $this->util->_e('Drag &amp; Drop'); ?></th>
-		<th scope="row"><?php $this->util->_e('Window'); ?> (<?php echo $this->texts['image']; ?>)</th>
+		<th scope="row"><?php _e( 'Drag &amp; Drop', 'wp-new-thickbox' ); ?></th>
+		<th scope="row"><?php _e( 'Window', 'wp-new-thickbox' ); ?> (<?php echo $this->texts['image']; ?>)</th>
 		<td>
-			<label class="item"><input type="checkbox" name="wp-new-thickbox[drag_img_move]"<?php $this->util->checked($this->options['drag_img_move'], 'on'); ?> />
-			<?php $this->util->_e('Move'); ?></label>
-			<label class="item"><input type="checkbox" name="wp-new-thickbox[drag_img_resize]"<?php $this->util->checked($this->options['drag_img_resize'], 'on'); ?> />
-			<?php $this->util->_e('Resize'); ?></label>
+			<label class="item"><input type="checkbox" name="wp-new-thickbox[drag_img_move]"<?php $this->util->checked( $this->options['drag_img_move'], 'on' ); ?> />
+			<?php _e( 'Move', 'wp-new-thickbox' ); ?></label>
+			<label class="item"><input type="checkbox" name="wp-new-thickbox[drag_img_resize]"<?php $this->util->checked( $this->options['drag_img_resize'], 'on' ); ?> />
+			<?php _e( 'Resize', 'wp-new-thickbox' ); ?></label>
 		</td>
 	</tr>
 	<tr>
 		<th scope="row"></th>
-		<th scope="row"><?php $this->util->_e('Window'); ?> (HTML)</th>
+		<th scope="row"><?php _e( 'Window', 'wp-new-thickbox' ); ?> (HTML)</th>
 		<td>
 			<label class="item"><input type="checkbox" name="wp-new-thickbox[drag_html_move]"<?php $this->util->checked($this->options['drag_html_move'], 'on'); ?> />
-			<?php $this->util->_e('Move'); ?></label>
+			<?php _e( 'Move', 'wp-new-thickbox' ); ?></label>
 			<label class="item"><input type="checkbox" name="wp-new-thickbox[drag_html_resize]"<?php $this->util->checked($this->options['drag_html_resize'], 'on'); ?> />
-			<?php $this->util->_e('Resize'); ?></label>
+			<?php _e( 'Resize', 'wp-new-thickbox' ); ?></label>
 		</td>
 	</tr>
 	<tr>
-		<th scope="row"><?php $this->util->_e('Keyboard Shortcuts', 'Keyboard shortcuts'); ?></th>
+		<th scope="row"><?php _e( 'Keyboard Shortcuts', 'wp-new-thickbox'); ?></th>
 		<th scope="row"><?php echo $this->texts['close']; ?></th>
 		<td>
-			<label class="item"><input type="checkbox" name="wp-new-thickbox[key_close_esc]"<?php $this->util->checked($this->options['key_close_esc'], 'on'); ?> />
+			<label class="item"><input type="checkbox" name="wp-new-thickbox[key_close_esc]"<?php $this->util->checked( $this->options['key_close_esc'], 'on' ); ?> />
 				Esc</label>
-			<label class="item"><input type="checkbox" name="wp-new-thickbox[key_close_enter]"<?php $this->util->checked($this->options['key_close_enter'], 'on'); ?> />
+			<label class="item"><input type="checkbox" name="wp-new-thickbox[key_close_enter]"<?php $this->util->checked( $this->options['key_close_enter'], 'on' ); ?> />
 				Enter</label>
 		</td>
 	</tr>
@@ -280,15 +281,15 @@ class auto_thickbox_options {
 		<th scope="row"></th>
 		<th scope="row"><?php echo $this->texts['prev2']; ?></th>
 		<td>
-			<label class="item"><input type="checkbox" name="wp-new-thickbox[key_prev_angle]"<?php $this->util->checked($this->options['key_prev_angle'], 'on'); ?> />
+			<label class="item"><input type="checkbox" name="wp-new-thickbox[key_prev_angle]"<?php $this->util->checked( $this->options['key_prev_angle'], 'on' ); ?> />
 				< ( , )</label>
-			<label class="item"><input type="checkbox" name="wp-new-thickbox[key_prev_left]"<?php $this->util->checked($this->options['key_prev_left'], 'on'); ?> />
-			<?php $this->util->_e('Left'); ?></label>
-			<label class="item"><input type="checkbox" name="wp-new-thickbox[key_prev_tab]"<?php $this->util->checked($this->options['key_prev_tab'], 'on'); ?> />
+			<label class="item"><input type="checkbox" name="wp-new-thickbox[key_prev_left]"<?php $this->util->checked( $this->options['key_prev_left'], 'on' ); ?> />
+			<?php _e( 'Left', 'wp-new-thickbox' ); ?></label>
+			<label class="item"><input type="checkbox" name="wp-new-thickbox[key_prev_tab]"<?php $this->util->checked( $this->options['key_prev_tab'], 'on' ); ?> />
 				Shift + Tab</label>
-			<label class="item"><input type="checkbox" name="wp-new-thickbox[key_prev_space]"<?php $this->util->checked($this->options['key_prev_space'], 'on'); ?> />
-				Shift + <?php $this->util->_e('Space'); ?></label>
-			<label class="item"><input type="checkbox" name="wp-new-thickbox[key_prev_bs]"<?php $this->util->checked($this->options['key_prev_bs'], 'on'); ?> />
+			<label class="item"><input type="checkbox" name="wp-new-thickbox[key_prev_space]"<?php $this->util->checked( $this->options['key_prev_space'], 'on' ); ?> />
+				Shift + <?php _e( 'Space', 'wp-new-thickbox' ); ?></label>
+			<label class="item"><input type="checkbox" name="wp-new-thickbox[key_prev_bs]"<?php $this->util->checked( $this->options['key_prev_bs'], 'on' ); ?> />
 				BackSpace</label>
 		</td>
 	</tr>
@@ -296,21 +297,21 @@ class auto_thickbox_options {
 		<th scope="row"></th>
 		<th scope="row"><?php echo $this->texts['next2']; ?></th>
 		<td>
-			<label class="item"><input type="checkbox" name="wp-new-thickbox[key_next_angle]"<?php $this->util->checked($this->options['key_next_angle'], 'on'); ?> />
+			<label class="item"><input type="checkbox" name="wp-new-thickbox[key_next_angle]"<?php $this->util->checked( $this->options['key_next_angle'], 'on' ); ?> />
 				> ( . )</label>
-			<label class="item"><input type="checkbox" name="wp-new-thickbox[key_next_right]"<?php $this->util->checked($this->options['key_next_right'], 'on'); ?> />
-			<?php $this->util->_e('Right'); ?></label>
-			<label class="item"><input type="checkbox" name="wp-new-thickbox[key_next_tab]"<?php $this->util->checked($this->options['key_next_tab'], 'on'); ?> />
+			<label class="item"><input type="checkbox" name="wp-new-thickbox[key_next_right]"<?php $this->util->checked( $this->options['key_next_right'], 'on' ); ?> />
+			<?php _e( 'Right', 'wp-new-thickbox' ); ?></label>
+			<label class="item"><input type="checkbox" name="wp-new-thickbox[key_next_tab]"<?php $this->util->checked( $this->options['key_next_tab'], 'on' ); ?> />
 				Tab</label>
-			<label class="item"><input type="checkbox" name="wp-new-thickbox[key_next_space]"<?php $this->util->checked($this->options['key_next_space'], 'on'); ?> />
-			<?php $this->util->_e('Space'); ?></label>
+			<label class="item"><input type="checkbox" name="wp-new-thickbox[key_next_space]"<?php $this->util->checked( $this->options['key_next_space'], 'on' ); ?> />
+			<?php _e( 'Space', 'wp-new-thickbox' ); ?></label>
 		</td>
 	</tr>
 	<tr>
 		<th scope="row"></th>
 		<th scope="row"><?php echo "{$this->texts['first2']} / {$this->texts['last2']}"; ?></th>
 		<td>
-			<label class="item"><input type="checkbox" name="wp-new-thickbox[key_end_home_end]"<?php $this->util->checked($this->options['key_end_home_end'], 'on'); ?> />
+			<label class="item"><input type="checkbox" name="wp-new-thickbox[key_end_home_end]"<?php $this->util->checked( $this->options['key_end_home_end'], 'on' ); ?> />
 				Home / End</label>
 		</td>
 	</tr>
@@ -319,30 +320,30 @@ class auto_thickbox_options {
 	}
 
 	function view_metabox() {
-		$bgcolor_title_trans = $this->options['bgcolor_title'] == 'transparent';
-		$bgcolor_cap_trans = $this->options['bgcolor_cap'] == 'transparent';
-		$bgcolor_img_trans = $this->options['bgcolor_img'] == 'transparent';
-		$bgcolor_html_trans = $this->options['bgcolor_html'] == 'transparent';
-		$bgcolor_bg_trans = $this->options['bgcolor_bg'] == 'transparent';
-		$border_win_none = $this->options['border_win'] == 'none';
-		$border_img_tl_none = $this->options['border_img_tl'] == 'none';
-		$border_img_br_none = $this->options['border_img_br'] == 'none';
-		$border_gallery_none = $this->options['border_gallery'] == 'none';
-		$box_shadow_win_none = $this->options['box_shadow_win'] == 'none';
-		$txt_shadow_title_none = $this->options['txt_shadow_title'] == 'none';
-		$txt_shadow_cap_none = $this->options['txt_shadow_cap'] == 'none';
-		$text_sel_color = $this->util->__('Select a Color', 'Select a color');
+		$bgcolor_title_trans   = 'transparent' === $this->options['bgcolor_title'];
+		$bgcolor_cap_trans     = 'transparent' === $this->options['bgcolor_cap'];
+		$bgcolor_img_trans     = 'transparent' === $this->options['bgcolor_img'];
+		$bgcolor_html_trans    = 'transparent' === $this->options['bgcolor_html'];
+		$bgcolor_bg_trans      = 'transparent' === $this->options['bgcolor_bg'];
+		$border_win_none       = 'none' === $this->options['border_win'];
+		$border_img_tl_none    = 'none' === $this->options['border_img_tl'];
+		$border_img_br_none    = 'none' === $this->options['border_img_br'];
+		$border_gallery_none   = 'none' === $this->options['border_gallery'];
+		$box_shadow_win_none   = 'none' === $this->options['box_shadow_win'];
+		$txt_shadow_title_none = 'none' === $this->options['txt_shadow_title'];
+		$txt_shadow_cap_none   = 'none' === $this->options['txt_shadow_cap'];
+		$text_sel_color = __( 'Select a Color', 'wp-new-thickbox' );
 ?>
 <table class="form-table">
 	<tr>
-		<th scope="row"><?php $this->util->_e('Position'); ?></th>
-		<th scope="row"><?php $this->util->_e('Title'); ?></th>
+		<th scope="row"><?php _e( 'Position', 'wp-new-thickbox' ); ?></th>
+		<th scope="row"><?php _e( 'Title', 'wp-new-thickbox' ); ?></th>
 		<td>
-			<label class="item"><input type="radio" name="wp-new-thickbox[position_title]" value="top"<?php $this->util->checked($this->options['position_title'], 'top'); ?> onclick="disableHoverOption(this)" />
-			<?php $this->util->_e('Top'); ?></label>
-			<label class="item"><input type="radio" name="wp-new-thickbox[position_title]" value="bottom"<?php $this->util->checked($this->options['position_title'], 'bottom'); ?> onclick="disableHoverOption(this)" />
-			<?php $this->util->_e('Bottom'); ?></label>
-			<label class="item"><input type="radio" name="wp-new-thickbox[position_title]" value="none"<?php $this->util->checked($this->options['position_title'], 'none'); ?> onclick="disableHoverOption(this)" />
+			<label class="item"><input type="radio" name="wp-new-thickbox[position_title]" value="top"<?php $this->util->checked( $this->options['position_title'], 'top' ); ?> onclick="disableHoverOption(this)" />
+			<?php _e( 'Top', 'wp-new-thickbox' ); ?></label>
+			<label class="item"><input type="radio" name="wp-new-thickbox[position_title]" value="bottom"<?php $this->util->checked( $this->options['position_title'], 'bottom' ); ?> onclick="disableHoverOption(this)" />
+			<?php _e( 'Bottom', 'wp-new-thickbox' ); ?></label>
+			<label class="item"><input type="radio" name="wp-new-thickbox[position_title]" value="none"<?php $this->util->checked( $this->options['position_title'], 'none' ); ?> onclick="disableHoverOption(this)" />
 			<?php echo $this->texts['none']; ?></label>
 		</td>
 	</tr>
@@ -925,27 +926,34 @@ class auto_thickbox_options {
 //		$this->__construct($auto_thickbox); // for PHP4
 //	}
 
-	function __construct(&$auto_thickbox) {
-		add_action('admin_menu', array(&$this, 'register_options_page'));
-		add_action('admin_init', array(&$this, 'register_options'));
-		add_action('admin_print_scripts-' . $this->settings_page_type, array(&$this, 'register_scripts'));
-		add_action('admin_print_styles-' . $this->settings_page_type, array(&$this, 'register_styles'));
+	function __construct( &$auto_thickbox ) {
+		add_action( 'admin_menu', array( &$this, 'register_options_page' ));
+		add_action( 'admin_init', array( &$this, 'register_options' ));
+		add_action( 'admin_print_scripts-' . $this->settings_page_type, array( &$this, 'register_scripts' ));
+		add_action( 'admin_print_styles-' . $this->settings_page_type, array( &$this, 'register_styles' ));
 
-		$this->util = &$auto_thickbox->util;
+		$this->util        = &$auto_thickbox->util;
 		$this->options_def = &$auto_thickbox->options_def;
-		$this->options = &$auto_thickbox->options;
-		$this->texts = &$auto_thickbox->texts;
+		$this->options     = &$auto_thickbox->options;
+		$this->texts       = &$auto_thickbox->texts;
 	}
 
 	function register_options() {
-		register_setting( $this->option_group, 'wp-new-thickbox', array(&$this, 'options_callback') );
+		register_setting( $this->option_group, 'wp-new-thickbox', array( &$this, 'options_callback' ) );
 	}
 
-	var $checkboxes_on = array('wp_gallery', 'thickbox_img', 'thickbox_text', 'auto_resize_img',
-		'key_close_esc', 'key_close_enter',
-		'key_prev_angle', 'key_prev_left',
-		'key_next_angle', 'key_next_right',
-		'key_end_home_end');
+	var $checkboxes_on = array( 'wp_gallery',
+                                'thickbox_img',
+                                'thickbox_text',
+                                'auto_resize_img',
+                                'key_close_esc',
+                                'key_close_enter',
+                                'key_prev_angle',
+                                'key_prev_left',
+                                'key_next_angle',
+                                'key_next_right',
+                                'key_end_home_end',
+	);
 
 	function options_callback($options) {
 		if (isset($_POST['reset'])) {
