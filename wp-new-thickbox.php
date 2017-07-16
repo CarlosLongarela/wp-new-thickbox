@@ -162,39 +162,45 @@ class WPNewThickbox {
 	 * @return void
 	 **/
 	function scripts() {
-		if ( $this->options['thickbox_type'] == 'modified' ) {
-			wp_deregister_script('thickbox');
-			$in_footer = $this->options['script_place'] == 'footer';
-			wp_register_script('thickbox', $this->util->plugins_url('thickbox.min.js'), array('jquery'), WP_NEW_THICKBOX_VER, $in_footer);
+		if ( 'modified' === $this->options['thickbox_type'] ) {
+			wp_deregister_script( 'thickbox' );
+			$in_footer = 'footer' === $this->options['script_place'];
+			wp_register_script( 'thickbox', $this->util->plugins_url( 'thickbox.min.js' ), array( 'jquery' ), WP_NEW_THICKBOX_VER, $in_footer );
 		}
-		wp_enqueue_script('thickbox');
-		if ( $this->options['thickbox_type'] == 'modified' ) {
+		wp_enqueue_script( 'thickbox' );
+		if ( 'modified' === $this->options['thickbox_type'] ) {
 			$l10n = array(
 				'next' => $this->texts['next'],
 				'prev' => $this->texts['prev'],
 				'image' => $this->texts['image'],
 				'of' => $this->texts['of'],
 				'close' => $this->texts['close'],
-				'noiframes' => $this->util->__('This feature requires inline frames. You have iframes disabled or your browser does not support them.'),
-				'loadingAnimation' => $this->options['img_load'] != 'none' ? $this->options['img_load'] : $this->options_def['img_load'],
-				'closeImage' => $this->options['img_close_btn'] != 'none' ? $this->options['img_close_btn'] : $this->options_def['img_close_btn']
+				'noiframes' => __( 'This feature requires inline frames. You have iframes disabled or your browser does not support them.' ),
+				'loadingAnimation' => 'none' !== $this->options['img_load'] ? $this->options['img_load'] : $this->options_def['img_load'],
+				'closeImage' => 'none' !== $this->options['img_close_btn'] ? $this->options['img_close_btn'] : $this->options_def['img_close_btn'],
 			);
-			switch ($this->options['click_img']) {
-				case 'prev_next': $l10n['last'] = $this->texts['last']; // not break
-				case 'next': $l10n['first'] = $this->texts['first']; break;
-				case 'open': $l10n['open'] = $this->texts['open']; break;
+
+			switch ( $this->options['click_img'] ) {
+				case 'prev_next':
+					$l10n['last'] = $this->texts['last']; // Not break.
+				case 'next':
+					$l10n['first'] = $this->texts['first'];
+					break;
+				case 'open':
+					$l10n['open'] = $this->texts['open'];
+					break;
 				case 'download':
-					$l10n['download'] = $this->util->__('Download');
-					$l10n['forceDL'] = $this->util->plugins_url('download.min.php');
+					$l10n['download'] = __( 'Download' );
+					$l10n['forceDL'] = plugins_url( 'wp-new-thickbox-download.php' );
 					break;
 				case 'expand_shrink':
-					$l10n['actual'] = $this->util->__('Actual Size', 'Original Size');
-					$l10n['fit'] = $this->util->__('Fit to Window');
+					$l10n['actual'] = __( 'Actual Size', 'Original Size' );
+					$l10n['fit'] = __( 'Fit to Window' );
 					break;
 			}
-			wp_localize_script('thickbox', 'thickboxL10n', $l10n);
+			wp_localize_script( 'thickbox', 'thickboxL10n', $l10n );
 		}
-	} # scripts()
+	} // End of scripts().
 
 	/**
 	 * styles()
@@ -202,15 +208,15 @@ class WPNewThickbox {
 	 * @return void
 	 **/
 	function styles() {
-		if ( $this->options['thickbox_type'] == 'modified' ) {
-			wp_deregister_style('thickbox');
+		if ( 'modified' === $this->options['thickbox_type'] ) {
+			wp_deregister_style( ' thickbox' );
 			wp_register_style( 'thickbox', $this->util->plugins_url( 'thickbox.min.css' ), false, WP_NEW_THICKBOX_VER );
 		}
-		wp_enqueue_style('thickbox');
+		wp_enqueue_style( 'thickbox' );
 	} # styles()
 
 	function print_resources() {
-		echo '<!-- Auto ThickBox Plus by attosoft (' . $this->util->__('http://attosoft.info/en/') . ') -->' . "\n";
+		echo '<!-- Auto ThickBox Plus by attosoft (' . __('http://attosoft.info/en/') . ') -->' . "\n";
 		$this->custom_scripts();
 		$this->custom_styles();
 	}
@@ -221,25 +227,35 @@ class WPNewThickbox {
 /* <![CDATA[ */
 jQuery(function($) {
 <?php
-		 if ( $this->options['auto_thickbox'] == 'js') {
+if ( 'js' === $this->options['auto_thickbox'] ) {
 ?>
 	var links = $('a[href][href!=""]').filter(function() {
 		// No ThickBox
-		var nothickbox = ['<?php echo str_replace(' ', '\', \'', trim($this->options['no_thickbox'])); ?>'];
+		var nothickbox = ['<?php echo str_replace( ' ', '\', \'', trim( $this->options['no_thickbox'] ) ); ?>'];
 		for (var i = 0; i < nothickbox.length; i++)
 			if ($(this).hasClass(nothickbox[i])) return false;
-<?php if ($this->options['thickbox_img'] == 'off') : ?>
+<?php
+	if ( 'off' === $this->options['thickbox_img'] ) :
+?>
 		// Image links to images
 		if ($(this).is(':has(img)')) return false;
-<?php endif; ?>
-<?php if ($this->options['thickbox_text'] == 'off') : ?>
+<?php
+	endif;
+
+	if ( 'off' === $this->options['thickbox_text'] ) :
+?>
 		// Text links to images
 		if (!$(this).is(':has(img)')) return false;
-<?php endif; ?>
-<?php if ($this->options['thickbox_target'] == 'off') : ?>
+<?php
+	endif;
+
+	if ( 'off' === $this->options['thickbox_target'] ) :
+?>
 		// Links with target attribute
 		if ($(this).is('[target][target!=""]')) return false;
-<?php endif; ?>
+<?php
+	endif;
+?>
 
 		return true;
 	});
@@ -250,10 +266,14 @@ jQuery(function($) {
 		return imageRegex.test($(this).attr('href'));
 	});
 	images.addClass('thickbox');
-<?php if ($this->options['thickbox_style'] == 'gallery') : ?>
+<?php
+	if ( 'gallery' === $this->options['thickbox_style'] ) :
+?>
 	// Gallery Images
 	images.not('[rel][rel!=""]').attr('rel', 'gallery-<?php the_ID(); ?>');
-<?php endif; ?>
+<?php
+	endif;
+?>
 
 	// Others
 	var others = links.filter(function() {
@@ -275,8 +295,9 @@ jQuery(function($) {
 	if (!$.isFunction($().live))
 		tb_init('a.thickbox');
 <?php
-		}
-		if ( $this->options['wp_gallery'] == 'on') {
+}
+
+if ( 'on' === $this->options['wp_gallery'] ) {
 ?>
 
 	// Set a different gallery-id for each WordPress Gallery
@@ -285,77 +306,112 @@ jQuery(function($) {
 			$(this).find('a.thickbox').attr('rel', this.id);
 	});
 <?php
-		}
+}
 ?>
 });
 
 <?php
-		if ($this->options['thickbox_type'] == 'built-in') {
-			if ( version_compare('3.2', get_bloginfo('version')) > 0 ) {
-				$includes_url = includes_url();
-				echo <<<SCRIPT
+if ( 'built-in' === $this->options['thickbox_type'] ) {
+	if ( version_compare( '3.2', get_bloginfo(  'version' ) ) > 0 ) {
+		$includes_url = includes_url();
+		echo <<<SCRIPT
 // for ThickBox in WordPress 2.9 to 3.1.4
 var tb_pathToImage = "{$includes_url}js/thickbox/loadingAnimation.gif";
 var tb_closeImage = "{$includes_url}js/thickbox/tb-close.png";
 
 SCRIPT;
-			}
-		}
+	}
+}
 
-		if ( $this->options['thickbox_type'] == 'modified') {
-		$script = '';
+if ( 'modified' === $this->options['thickbox_type'] ) {
+	$script = '';
 
-		if ( !$this->is_default_options('auto_resize_img') )
-			$script .= "tb_options.auto_resize_img = " . var_export($this->options['auto_resize_img'] == 'on', true) . ";\n";
-		if ( !$this->is_default_options('auto_resize_html') )
-			$script .= "tb_options.auto_resize_html = " . var_export($this->options['auto_resize_html'] == 'on', true) . ";\n";
-		if ( !$this->is_default_options('effect_open') )
-			$script .= "tb_options.effect_open = '{$this->options['effect_open']}';\n";
-		if ( !$this->is_default_options('effect_close') )
-			$script .= "tb_options.effect_close = '{$this->options['effect_close']}';\n";
-		if ( !$this->is_default_options('effect_trans') )
-			$script .= "tb_options.effect_trans = '{$this->options['effect_trans']}';\n";
-		if ( !$this->is_default_options('effect_title') )
-			$script .= "tb_options.effect_title = '{$this->options['effect_title']}';\n";
-		if ( !$this->is_default_options('effect_cap') )
-			$script .= "tb_options.effect_cap = '{$this->options['effect_cap']}';\n";
-		if ( !$this->is_default_options('effect_speed') ) {
-			$quot = is_numeric($this->options['effect_speed']) ? "" : "'";
-			$script .= "tb_options.effect_speed = " . $quot . $this->options['effect_speed'] . $quot . ";\n";
-		}
-		if ( !$this->is_default_options('click_img') )
-			$script .= "tb_options.click_img = '{$this->options['click_img']}';\n";
-		if ( !$this->is_default_options('click_end') )
-			$script .= "tb_options.click_end = '{$this->options['click_end']}';\n";
-		if ( !$this->is_default_options('click_bg') )
-			$script .= "tb_options.click_bg = '{$this->options['click_bg']}';\n";
-		if ( !$this->is_default_options('wheel_img') )
-			$script .= "tb_options.wheel_img = '{$this->options['wheel_img']}';\n";
-		if ( !$this->is_default_options('wheel_bg') )
-			$script .= "tb_options.wheel_bg = '{$this->options['wheel_bg']}';\n";
-		if ( !$this->is_default_options('drag_img_move') )
-			$script .= "tb_options.move_img = " . var_export($this->options['drag_img_move'] == 'on', true) . ";\n";
-		if ( !$this->is_default_options('drag_img_resize') )
-			$script .= "tb_options.resize_img = " . var_export($this->options['drag_img_resize'] == 'on', true) . ";\n";
-		if ( !$this->is_default_options('drag_html_move') )
-			$script .= "tb_options.move_html = " . var_export($this->options['drag_html_move'] == 'on', true) . ";\n";
-		if ( !$this->is_default_options('drag_html_resize') )
-			$script .= "tb_options.resize_html = " . var_export($this->options['drag_html_resize'] == 'on', true) . ";\n";
-		$keys_close = array();
-		if ( $this->options['key_close_esc'] == 'on' ) $keys_close[] = 27;
-		if ( $this->options['key_close_enter'] == 'on' ) $keys_close[] = 13;
-		if ( !$this->is_default_options(array('key_close_esc', 'key_close_enter')) )
-			$script .= "tb_options.keys_close = [" . implode(', ', $keys_close) . "];\n";
-		$keys_prev = $keys_prev_shift = array();
-		if ( $this->options['key_prev_angle'] == 'on' ) $keys_prev[] = 188;
-		if ( $this->options['key_prev_left'] == 'on' ) $keys_prev[] = 37;
-		if ( $this->options['key_prev_tab'] == 'on' ) $keys_prev_shift[] = 9;
-		if ( $this->options['key_prev_space'] == 'on' ) $keys_prev_shift[] = 32;
-		if ( $this->options['key_prev_bs'] == 'on' ) $keys_prev[] = 8;
-		if ( !$this->is_default_options(array('key_prev_angle', 'key_prev_left', 'key_prev_tab', 'key_prev_space', 'key_prev_bs')) ) {
-			$script .= "tb_options.keys_prev = [" . implode(', ', $keys_prev) . "];\n";
-			$script .= "tb_options.keys_prev['shift'] = [" . implode(', ', $keys_prev_shift) . "];\n";
-		}
+	if ( ! $this->is_default_options( 'auto_resize_img' ) ) {
+		$script .= 'tb_options.auto_resize_img = ' . var_export( 'on' === $this->options['auto_resize_img'], true ) . ";\n";
+	}
+
+	if ( ! $this->is_default_options( 'auto_resize_html' ) ) {
+		$script .= 'tb_options.auto_resize_html = ' . var_export( 'on' === $this->options['auto_resize_html'], true ) . ";\n";
+	}
+
+	if ( ! $this->is_default_options( 'effect_open' ) ) {
+		$script .= "tb_options.effect_open = '{$this->options['effect_open']}';\n";
+	}
+
+	if ( ! $this->is_default_options( 'effect_close' ) ) {
+		$script .= "tb_options.effect_close = '{$this->options['effect_close']}';\n";
+	}
+
+	if ( ! $this->is_default_options( 'effect_trans' ) ) {
+		$script .= "tb_options.effect_trans = '{$this->options['effect_trans']}';\n";
+	}
+
+	if ( ! $this->is_default_options( 'effect_title' ) ) {
+		$script .= "tb_options.effect_title = '{$this->options['effect_title']}';\n";
+	}
+
+	if ( ! $this->is_default_options( 'effect_cap' ) ) {
+		$script .= "tb_options.effect_cap = '{$this->options['effect_cap']}';\n";
+	}
+
+	if ( ! $this->is_default_options( 'effect_speed' ) ) {
+		$quot = is_numeric( $this->options['effect_speed'] ) ? '' : "'";
+		$script .= 'tb_options.effect_speed = ' . $quot . $this->options['effect_speed'] . $quot . ";\n";
+	}
+
+	if ( ! $this->is_default_options( 'click_img' ) ) {
+		$script .= "tb_options.click_img = '{$this->options['click_img']}';\n";
+	}
+
+	if ( ! $this->is_default_options( 'click_end' ) ) {
+		$script .= "tb_options.click_end = '{$this->options['click_end']}';\n";
+	}
+
+	if ( ! $this->is_default_options( 'click_bg' ) ) {
+		$script .= "tb_options.click_bg = '{$this->options['click_bg']}';\n";
+	}
+
+	if ( ! $this->is_default_options( 'wheel_img' ) ) {
+		$script .= "tb_options.wheel_img = '{$this->options['wheel_img']}';\n";
+	}
+
+	if ( ! $this->is_default_options( 'wheel_bg' ) ) {
+		$script .= "tb_options.wheel_bg = '{$this->options['wheel_bg']}';\n";
+	}
+
+	if ( ! $this->is_default_options( 'drag_img_move' ) ) {
+		$script .= 'tb_options.move_img = ' . var_export( 'on' === $this->options['drag_img_move'], true ) . ";\n";
+	}
+
+	if ( ! $this->is_default_options( 'drag_img_resize' ) ) {
+		$script .= 'tb_options.resize_img = ' . var_export( 'on' === $this->options['drag_img_resize'], true ) . ";\n";
+	}
+
+	if ( ! $this->is_default_options( 'drag_html_move' ) ) {
+		$script .= 'tb_options.move_html = ' . var_export( 'on' === $this->options['drag_html_move'], true ) . ";\n";
+	}
+
+	if ( ! $this->is_default_options( 'drag_html_resize' ) ) {
+		$script .= 'tb_options.resize_html = ' . var_export( 'on' === $this->options['drag_html_resize'], true ) . ";\n";
+	}
+
+	$keys_close = array();
+
+	if ( $this->options['key_close_esc'] == 'on' ) $keys_close[] = 27;
+	if ( $this->options['key_close_enter'] == 'on' ) $keys_close[] = 13;
+	if ( !$this->is_default_options(array('key_close_esc', 'key_close_enter')) )
+		$script .= "tb_options.keys_close = [" . implode(', ', $keys_close) . "];\n";
+	$keys_prev = $keys_prev_shift = array();
+	if ( $this->options['key_prev_angle'] == 'on' ) $keys_prev[] = 188;
+	if ( $this->options['key_prev_left'] == 'on' ) $keys_prev[] = 37;
+	if ( $this->options['key_prev_tab'] == 'on' ) $keys_prev_shift[] = 9;
+	if ( $this->options['key_prev_space'] == 'on' ) $keys_prev_shift[] = 32;
+	if ( $this->options['key_prev_bs'] == 'on' ) $keys_prev[] = 8;
+	if ( !$this->is_default_options(array('key_prev_angle', 'key_prev_left', 'key_prev_tab', 'key_prev_space', 'key_prev_bs')) ) {
+		$script .= "tb_options.keys_prev = [" . implode(', ', $keys_prev) . "];\n";
+		$script .= "tb_options.keys_prev['shift'] = [" . implode(', ', $keys_prev_shift) . "];\n";
+	}
+
 		$keys_next = array();
 		if ( $this->options['key_next_angle'] == 'on' ) $keys_next[] = 190;
 		if ( $this->options['key_next_right'] == 'on' ) $keys_next[] = 39;
