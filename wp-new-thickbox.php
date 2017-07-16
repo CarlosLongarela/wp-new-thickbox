@@ -682,17 +682,17 @@ if ( 'modified' === $this->options['thickbox_type'] ) {
 
 	function add_wp_new_thickbox_action_links( $links, $file ) {
 		if ( $file == plugin_basename(__FILE__) )
-			$links[] = '<a href="options-general.php?page=wp-new-thickbox">' . $this->util->__( 'Settings' ) . '</a>';
+			$links[] = '<a href="options-general.php?page=wp-new-thickbox">' . __( 'Settings' ) . '</a>';
 		return $links;
 	}
 
 	// Additional links on the Plugins page
 	function add_auto_thickbox_links($links, $file) {
 		if ( $file == plugin_basename(__FILE__) ) {
-			$links[] = '<a href="plugin-install.php?tab=plugin-information&plugin=wp-new-thickbox&TB_iframe" class="thickbox" title="Auto ThickBox Plus">' . $this->util->__('Show Details', 'Details') . '</a>';
-			$links[] = '<a href="http://wordpress.org/support/plugin/wp-new-thickbox" target="_blank">' . $this->util->__('Support') . '</a>';
-			$links[] = '<a href="' . $this->util->__('http://attosoft.info/en/') . 'contact/" target="_blank">' . ucfirst($this->util->__('Contact', 'contact')) . '</a>';
-			$links[] = '<a href="' . $this->util->__('http://attosoft.info/en/') . 'donate/" target="_blank">' . $this->util->__('Donate') . '</a>';
+			$links[] = '<a href="plugin-install.php?tab=plugin-information&plugin=wp-new-thickbox&TB_iframe" class="thickbox" title="Auto ThickBox Plus">' . __('Show Details', 'Details') . '</a>';
+			$links[] = '<a href="http://wordpress.org/support/plugin/wp-new-thickbox" target="_blank">' . __('Support') . '</a>';
+			$links[] = '<a href="' . __('http://attosoft.info/en/') . 'contact/" target="_blank">' . ucfirst(__('Contact', 'contact')) . '</a>';
+			$links[] = '<a href="' . __('http://attosoft.info/en/') . 'donate/" target="_blank">' . __('Donate') . '</a>';
 		}
 		return $links;
 	}
