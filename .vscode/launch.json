@@ -1,0 +1,13 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Escuchar XDebug fpm",
+            "type": "php",
+            "request": "launch",
+            "serverSourceRoot": "/srv/www/pruebas/htdocs/wp-content/plugins/cl-wp-mailgun",
+            "localSourceRoot": "${workspaceRoot}",
+            "port": 9000
+        }
+    ]
+}
