@@ -708,33 +708,39 @@ if ( 'modified' === $this->options['thickbox_type'] ) {
 
 	function __construct() {
 
-		load_plugin_textdomain('auto-thickbox', false, 'wp-new-thickbox/languages');
+		load_plugin_textdomain( 'auto-thickbox', false, 'wp-new-thickbox/languages' );
 
-		if (require_once dirname(__FILE__) . '/wp-new-thickbox-utils.php')
-			$this->util = new auto_thickbox_utils();
+		if ( require_once dirname( __FILE__ ) . '/wp-new-thickbox-utils.php' ) {
+			$this->util = new WpNewThickboxUtils();
+		}
+
 		$this->init_options();
 		$this->init_texts();
 
-		if ( !is_admin() && isset($_SERVER['HTTP_USER_AGENT']) &&
-			strpos($_SERVER['HTTP_USER_AGENT'], 'W3C_Validator') === false) {
-			if ( $this->options['auto_thickbox'] == 'filter' && !class_exists('AnchorUtils') )
-				include dirname(__FILE__) . '/anchor-utils/anchor-utils.php';
+		if ( ! is_admin() && isset( $_SERVER['HTTP_USER_AGENT'] ) &&
+			false === strpos( $_SERVER['HTTP_USER_AGENT'], 'W3C_Validator' ) ) {
+			if ( 'filter' === $this->options['auto_thickbox'] && ! class_exists( 'AnchorUtils' ) ) {
+				include dirname( __FILE__ ) . '/anchor-utils/anchor-utils.php';
+			}
 
-			add_action('wp_print_scripts', array(&$this, 'scripts'));
-			add_action('wp_print_styles', array(&$this, 'styles'));
+			add_action( 'wp_print_scripts', array( &$this, 'scripts' ) );
+			add_action( 'wp_print_styles', array( &$this, 'styles' ) );
 
-			$res_hook = $this->options['script_place'] == 'header' ? 'wp_head' : 'wp_footer';
-			add_action($res_hook, array(&$this, 'print_resources'), 20);
+			$res_hook = 'header' === $this->options['script_place'] ? 'wp_head' : 'wp_footer';
+			add_action( $res_hook, array( &$this, 'print_resources' ), 20 );
 
-			if ($this->options['auto_thickbox'] == 'filter')
-				add_filter('filter_anchor', array(&$this, 'filter'));
+			if ( 'filter' === $this->options['auto_thickbox'] ) {
+				add_filter( 'filter_anchor', array( &$this, 'filter'  ) );
+			}
 		}
 
 		if ( is_admin() ) {
-			if (include_once dirname(__FILE__) . '/auto-thickbox-options.php')
-				new auto_thickbox_options($this);
-			add_filter('plugin_action_links', array(&$this, 'add_auto_thickbox_action_links'), 10, 2);
-			add_filter('plugin_row_meta', array(&$this, 'add_auto_thickbox_links'), 10, 2);
+			if ( include_once dirname(__FILE__) . '/wp-new-thickbox-options.php' ) {
+				new WPNewThickboxOptions( $this );
+			}
+
+			add_filter( 'plugin_action_links', array( &$this, 'add_wp_new_thickbox_action_links' ), 10, 2 );
+			add_filter( 'plugin_row_meta', array( &$this, 'add_auto_thickbox_links' ), 10, 2 );
 		}
 	}
 

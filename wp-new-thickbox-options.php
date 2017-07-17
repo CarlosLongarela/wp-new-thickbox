@@ -71,10 +71,10 @@ class WPNewThickboxOptions {
 		<td>
 			<label><input type="radio" name="wp-new-thickbox[thickbox_style]" value="single"<?php $this->util->checked( $this->options['thickbox_style'], 'single' ); ?> />
 			<?php esc_html_e( 'Single Image', 'wp-new-thickbox' ); ?></label>
-			(<a href="<?php echo $this->util->plugins_url( 'screenshot-1.jpg' ); ?>" class="thickbox-image" title="<?php _e ('Single Image', 'wp-new-thickbox' ); ?>"><?php esc_html_e( 'Preview', 'wp-new-thickbox' ); ?></a>)
-			<label class="boundary"><input type="radio" name="wp-new-thickbox[thickbox_style]" value="gallery"<?php $this->util->checked($this->options['thickbox_style'], 'gallery'); ?> />
+			(<a href="<?php echo $this->util->plugins_url( 'screenshot-1.jpg' ); ?>" class="thickbox-image" title="<?php esc_html_e( 'Single Image', 'wp-new-thickbox' ); ?>"><?php esc_html_e( 'Preview', 'wp-new-thickbox' ); ?></a>)
+			<label class="boundary"><input type="radio" name="wp-new-thickbox[thickbox_style]" value="gallery"<?php $this->util->checked( $this->options['thickbox_style'], 'gallery'); ?> />
 			<?php esc_html_e( 'Gallery Images', 'wp-new-thickbox' ); ?></label>
-			(<a href="<?php echo $this->util->plugins_url('screenshot-2.jpg'); ?>" class="thickbox-image" title="<?php _e ('Gallery Images', 'wp-new-thickbox'); ?>" rel="gallery"><?php esc_html_e( 'Preview', 'wp-new-thickbox' ); ?></a>)
+			(<a href="<?php echo $this->util->plugins_url( 'screenshot-2.jpg' ); ?>" class="thickbox-image" title="<?php esc_html_e( 'Gallery Images', 'wp-new-thickbox' ); ?>" rel="gallery"><?php esc_html_e( 'Preview', 'wp-new-thickbox' ); ?></a>)
 		</td>
 	</tr>
 	<tr>
