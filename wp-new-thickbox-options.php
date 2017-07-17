@@ -8,14 +8,14 @@
 class WPNewThickboxOptions {
 
 	function register_options_page() {
-		add_options_page( 'WP New ThickBox' . __( 'Settings', 'wp-new-thickbox' ), 'WP New ThickBox', 'manage_options', 'wp-new-thickbox', array( &$this, 'options_page' ) );
-		add_meta_box( 'general-box', __( 'General', 'wp-new-thickbox' ), array( &$this, 'general_metabox' ), $this->settings_page_type, 'normal' );
-		add_meta_box( 'action-box', __( 'Action', 'wp-new-thickbox' ), array( &$this, 'action_metabox' ), $this->settings_page_type, 'normal' );
-		add_meta_box( 'view-box', ucfirst( __( 'View', 'wp-new-thickbox' ) ), array( &$this, 'view_metabox' ), $this->settings_page_type, 'normal' );
-		add_meta_box( 'text-box', __( 'Text', 'wp-new-thickbox' ), array( &$this, 'text_metabox' ), $this->settings_page_type, 'normal' );
+		add_options_page( 'WP New ThickBox' . esc_htmlesc_html__( 'Settings', 'wp-new-thickbox' ), 'WP New ThickBox', 'manage_options', 'wp-new-thickbox', array( &$this, 'options_page' ) );
+		add_meta_box( 'general-box', esc_html__( 'General', 'wp-new-thickbox' ), array( &$this, 'general_metabox' ), $this->settings_page_type, 'normal' );
+		add_meta_box( 'action-box', esc_html__( 'Action', 'wp-new-thickbox' ), array( &$this, 'action_metabox' ), $this->settings_page_type, 'normal' );
+		add_meta_box( 'view-box', ucfirst( esc_html__( 'View', 'wp-new-thickbox' ) ), array( &$this, 'view_metabox' ), $this->settings_page_type, 'normal' );
+		add_meta_box( 'text-box', esc_html__( 'Text', 'wp-new-thickbox' ), array( &$this, 'text_metabox' ), $this->settings_page_type, 'normal' );
 		add_meta_box( 'image-box', $this->texts['image'], array( &$this, 'image_metabox' ), $this->settings_page_type, 'normal' );
-		add_meta_box( 'effect-box', __( 'Effect', 'wp-new-thickbox' ) . ' (' . __( 'beta', 'wp-new-thickbox' ) . ')', array( &$this, 'effect_metabox' ), $this->settings_page_type, 'normal' );
-		add_meta_box( 'about-box', __( 'About', 'wp-new-thickbox' ), array( &$this, 'about_metabox' ), $this->settings_page_type, 'normal' );
+		add_meta_box( 'effect-box', esc_html__( 'Effect', 'wp-new-thickbox' ) . ' (' . esc_html__( 'beta', 'wp-new-thickbox' ) . ')', array( &$this, 'effect_metabox' ), $this->settings_page_type, 'normal' );
+		add_meta_box( 'about-box', esc_html__( 'About', 'wp-new-thickbox' ), array( &$this, 'about_metabox' ), $this->settings_page_type, 'normal' );
 		if ( isset( $_SERVER['HTTP_REFERER'] ) && strpos( $_SERVER['HTTP_REFERER'], 'post_id=' . $this->options['post_id']) !== false ) {
 			add_filter( 'gettext', array( &$this, 'replace_insert_button' ), 20, 3 );
 			register_post_type( 'wp-new-thickbox', array( 'label' => 'WP New ThickBox' ) );
@@ -23,7 +23,7 @@ class WPNewThickboxOptions {
 	}
 
 	function replace_insert_button( $translated_text, $text, $domain ) {
-		return 'Insert into Post' === $text ? __( 'Insert Image', 'wp-new-thickbox' ) : $translated_text;
+		return 'Insert into Post' === $text ? esc_html__( 'Insert Image', 'wp-new-thickbox' ) : $translated_text;
 	}
 
 	function register_scripts() {
@@ -332,7 +332,7 @@ class WPNewThickboxOptions {
 		$box_shadow_win_none   = 'none' === $this->options['box_shadow_win'];
 		$txt_shadow_title_none = 'none' === $this->options['txt_shadow_title'];
 		$txt_shadow_cap_none   = 'none' === $this->options['txt_shadow_cap'];
-		$text_sel_color = __( 'Select a Color', 'wp-new-thickbox' );
+		$text_sel_color = esc_html__( 'Select a Color', 'wp-new-thickbox' );
 ?>
 <table class="form-table">
 	<tr>
@@ -380,10 +380,10 @@ class WPNewThickboxOptions {
 		</td>
 	</tr>
 	<tr>
-		<th scope="row"><a href="<?php esc_html_e( 'https://developer.mozilla.org/en/CSS/font-family', 'wp-new-thickbox' ); ?>" target="_blank"><?php echo ucwords( __( 'Font Family', 'wp-new-thickbox' ) ); ?></a></th>
+		<th scope="row"><a href="<?php esc_html_e( 'https://developer.mozilla.org/en/CSS/font-family', 'wp-new-thickbox' ); ?>" target="_blank"><?php esc_html_e( 'Font Family', 'wp-new-thickbox' ); ?></a></th>
 		<th scope="row"><?php esc_html_e( 'Title', 'wp-new-thickbox' ); ?></th>
 		<td>
-			<input type="text" name="wp-new-thickbox[font_title]" value="<?php echo $this->util->esc_attr( $this->options['font_title'] ); ?>" class="large-text" />
+			<input type="text" name="wp-new-thickbox[font_title]" value="<?php echo esc_attr( $this->options['font_title'] ); ?>" class="large-text" />
 			<label><input type="checkbox" name="wp-new-thickbox[font_weight_title]" value="bold"<?php $this->util->checked( $this->options['font_weight_title'], 'bold' ); ?> />
 			<?php esc_html_e( 'Bold', 'wp-new-thickbox' ); ?></label>
 		</td>
@@ -392,13 +392,13 @@ class WPNewThickboxOptions {
 		<th scope="row"></th>
 		<th scope="row"><?php esc_html_e( 'Caption', 'wp-new-thickbox' ); ?></th>
 		<td>
-			<input type="text" name="wp-new-thickbox[font_cap]" value="<?php echo $this->util->esc_attr( $this->options['font_cap'] ); ?>" class="large-text" />
+			<input type="text" name="wp-new-thickbox[font_cap]" value="<?php echo esc_attr( $this->options['font_cap'] ); ?>" class="large-text" />
 			<label><input type="checkbox" name="wp-new-thickbox[font_weight_cap]" value="bold"<?php $this->util->checked( $this->options['font_weight_cap'], 'bold' ); ?> />
 			<?php esc_html_e( 'Bold', 'wp-new-thickbox' ); ?></label>
 		</td>
 	</tr>
 	<tr>
-		<th scope="row"><a href="<?php esc_html_e( 'https://developer.mozilla.org/en/CSS/font-size', 'wp-new-thickbox' ); ?>" target="_blank"><?php echo ucwords( __( 'Font Size', 'wp-new-thickbox' ) ); ?></a></th>
+		<th scope="row"><a href="<?php esc_html_e( 'https://developer.mozilla.org/en/CSS/font-size', 'wp-new-thickbox' ); ?>" target="_blank"><?php esc_html_e( 'Font Size', 'wp-new-thickbox' ); ?></a></th>
 		<th scope="row"><?php esc_html_e( 'Title', 'wp-new-thickbox' ); ?></th>
 		<td>
 			<input type="number" min="0" name="wp-new-thickbox[font_size_title]" value="<?php echo $this->options['font_size_title']; ?>" class="small-text" /> px
@@ -702,32 +702,32 @@ class WPNewThickboxOptions {
 	}
 
 	function sortable_items( $refs ) {
-		$text_link = ucfirst( __( 'Link', 'wp-new-thickbox' ) );
+		$text_link = ucfirst( esc_html__( 'Link', 'wp-new-thickbox' ) );
 		foreach ( explode( ',', $refs ) as $ref ) {
 			switch ( trim( $ref, "'" ) ) {
 				case 'link-title':
-					echo "<li class='ui-state-default' id='link-title'>{$text_link} - " . __( 'Title', 'wp-new-thickbox' ) . ' (<code>a@title</code>)</li>';
+					echo "<li class='ui-state-default' id='link-title'>{$text_link} - " . esc_html__( 'Title', 'wp-new-thickbox' ) . ' (<code>a@title</code>)</li>';
 					break;
 				case 'link-name':
-					echo "<li class='ui-state-default' id='link-name'>{$text_link} - " . __( 'Name', 'wp-new-thickbox' ) . ' (<code>a@name</code>)</li>';
+					echo "<li class='ui-state-default' id='link-name'>{$text_link} - " . esc_html__( 'Name', 'wp-new-thickbox' ) . ' (<code>a@name</code>)</li>';
 					break;
 				case 'blank':
-					echo "<li class='ui-state-default' id='blank'>" . __( 'Blank', 'wp-new-thickbox' ) . '</li>';
+					echo "<li class='ui-state-default' id='blank'>" . esc_html__( 'Blank', 'wp-new-thickbox' ) . '</li>';
 					break;
 				case 'img-title':
-					echo "<li class='ui-state-default' id='img-title'>{$this->texts['image']} - " . __( 'Title', 'wp-new-thickbox' ) . ' (<code>img@title</code>)</li>';
+					echo "<li class='ui-state-default' id='img-title'>{$this->texts['image']} - " . esc_html__( 'Title', 'wp-new-thickbox' ) . ' (<code>img@title</code>)</li>';
 					break;
 				case 'img-alt':
-					echo "<li class='ui-state-default' id='img-alt'>{$this->texts['image']} - " . __( 'Alternate Text', 'wp-new-thickbox' ) . ' (<code>img@alt</code>)</li>';
+					echo "<li class='ui-state-default' id='img-alt'>{$this->texts['image']} - " . esc_html__( 'Alternate Text', 'wp-new-thickbox' ) . ' (<code>img@alt</code>)</li>';
 					break;
 				case 'img-cap':
-					echo "<li class='ui-state-default' id='img-cap'>{$this->texts['image']} - " . __( 'Caption', 'wp-new-thickbox' ) . " (<code>@class='wp-caption-text'</code>)</li>";
+					echo "<li class='ui-state-default' id='img-cap'>{$this->texts['image']} - " . esc_html__( 'Caption', 'wp-new-thickbox' ) . " (<code>@class='wp-caption-text'</code>)</li>";
 					break;
 				case 'img-desc':
-					echo "<li class='ui-state-default' id='img-desc'>{$this->texts['image']} - " . __( 'Description', 'wp-new-thickbox' ) . ' (<code>img@longdesc</code>)</li>';
+					echo "<li class='ui-state-default' id='img-desc'>{$this->texts['image']} - " . esc_html__( 'Description', 'wp-new-thickbox' ) . ' (<code>img@longdesc</code>)</li>';
 					break;
 				case 'img-name':
-					echo "<li class='ui-state-default' id='img-name'>{$this->texts['image']} - " . __( 'Name', 'wp-new-thickbox' ) . ' (<code>img@name</code>)</li>';
+					echo "<li class='ui-state-default' id='img-name'>{$this->texts['image']} - " . esc_html__( 'Name', 'wp-new-thickbox' ) . ' (<code>img@name</code>)</li>';
 					break;
 			}
 		}
@@ -748,7 +748,7 @@ class WPNewThickboxOptions {
 		$img_close_btn      = ! $img_close_btn_none ? $this->options['img_close_btn'] : $this->options_def['img_close_btn'];
 		$img_load_none      = 'none' === $this->options['img_load'];
 		$img_load           = ! $img_load_none ? $this->options['img_load'] : $this->options_def['img_load'];
-		$text_sel_file      = __( 'Select a File', 'wp-new-thickbox' );
+		$text_sel_file      = esc_html__( 'Select a File', 'wp-new-thickbox' );
 
 		echo "<script type='text/javascript'>/* <![CDATA[ */var post_id = {$this->options['post_id']};/* ]]> */</script>\n";
 ?>
@@ -991,7 +991,7 @@ class WPNewThickboxOptions {
 
 	function options_callback( $options ) {
 		if ( isset( $_POST['reset'] ) ) {
-			add_settings_error( 'general', 'settings_updated', __( 'Settings reset.', 'wp-new-thickbox' ), 'updated' );
+			add_settings_error( 'general', 'settings_updated', esc_html__( 'Settings reset.', 'wp-new-thickbox' ), 'updated' );
 			return $this->options_def;
 		}
 		foreach ( $this->checkboxes_on as $checkbox ) {

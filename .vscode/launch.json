@@ -5,7 +5,7 @@
             "name": "Escuchar XDebug fpm",
             "type": "php",
             "request": "launch",
-            "serverSourceRoot": "/srv/www/pruebas/htdocs/wp-content/plugins/cl-wp-mailgun",
+            "serverSourceRoot": "/srv/www/pruebas/htdocs/wp-content/plugins/cl-new-thickbox",
             "localSourceRoot": "${workspaceRoot}",
             "port": 9000
         }

@@ -1,16 +1,16 @@
 === WP New ThickBox ===
-Contributors: attosoft
-Donate link: http://attosoft.info/en/donate/
+Contributors: carloslongarela, almendron, attosoft
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7WT49YJDWJUCY
 Tags: lightbox, thickbox, gallery, image, images, thumbnail, thumbnails, popup, pop-up, overlay, photo, photos, picture, pictures, javascript, inline, iframe, ajax, jquery, plugin, plugins, link, links, widget, widgets, nextgen, nextgen gallery, mobile, iphone, android
 Requires at least: 2.7
-Tested up to: 3.4.2
+Tested up to: 4.8
 Stable tag: trunk
 
 Automatically applies ThickBox script that overlays linked image, inline, iFramed and AJAX content on the page in simple effect.
 
 == Description ==
 
-Auto ThickBox Plus is WordPress plugin that applies [ThickBox script](http://thickbox.net/) to your site automatically. ThickBox is commonly-used Lightbox-like plugin, and can overlay linked image, inline, iFramed and AJAX content on the page in simple effect. All you have to do is write links like below, and the linked contents will be overlaid by clicking themselves.
+WP New ThickBox is WordPress plugin that applies [ThickBox script](http://thickbox.net/) to your site automatically. ThickBox is commonly-used Lightbox-like plugin, and can overlay linked image, inline, iFramed and AJAX content on the page in simple effect. All you have to do is write links like below, and the linked contents will be overlaid by clicking themselves.
 
     <a href="image"><img src="thumbnail" /></a>
     <a href="image">Image Content</a>

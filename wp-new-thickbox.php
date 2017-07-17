@@ -1,4 +1,11 @@
 <?php
+/**
+ * ThickBox plugin.
+ *
+ * @package WP New ThickBox
+ * @version 1.0
+ */
+
 /*
 Plugin Name: WP New ThickBox
 Plugin URI: https://github.com/CarlosLongarela/wp-new-thickbox
@@ -64,7 +71,7 @@ class WpNewThickbox {
 			return WpNewThickbox::image( $anchor );
 		} elseif ( ! empty( $anchor['attr']['class'] ) && in_array( 'thickbox', $anchor['attr']['class'] ) ) {
 			return WpNewThickbox::iframe( $anchor );
-		} elseif ( strpos( $anchor['attr']['href'], 'TB_iframe' ) !== false || strpos( $anchor['attr']['href'], '#TB_inline' ) !== false ) {
+		} elseif ( false !== strpos( $anchor['attr']['href'], 'TB_iframe' ) || false !== strpos( $anchor['attr']['href'], '#TB_inline' ) ) {
 			return $this->add_thickbox_class( $anchor );
 		} else {
 			return $anchor;
@@ -109,8 +116,8 @@ class WpNewThickbox {
 	 * @return anchor $anchor
 	 */
 	function image( $anchor ) {
-		if ( ( 'off' === $this->options['thickbox_img'] && preg_match( "/^\s*<\s*img\s.+?>\s*$/is", $anchor['body'] ) )
-			|| ( 'off' === $this->options['thickbox_text'] && ! preg_match( "/^\s*<\s*img\s.+?>\s*$/is", $anchor['body'] ) )
+		if ( ( 'off' === $this->options['thickbox_img'] && preg_match( '/^\s*<\s*img\s.+?>\s*$/is', $anchor['body'] ) )
+			|| ( 'off' === $this->options['thickbox_text'] && ! preg_match( '/^\s*<\s*img\s.+?>\s*$/is', $anchor['body'] ) )
 			|| ( 'off' === $this->options['thickbox_target'] && ! empty( $anchor['attr']['target'] ) ) ) {
 				return $anchor;
 		}
@@ -142,7 +149,7 @@ class WpNewThickbox {
 			return $anchor;
 		}
 
-		if ( false === strpos( $anchor['attr']['href'], '://' ) || false !== strpos( $anchor['attr']['href'], wp_unslash( $_SERVER['HTTP_HOST'] ) ) ) {
+		if ( false === strpos( $anchor['attr']['href'], '://' ) || false !== strpos( $anchor['attr']['href'], wp_unslash( esc_url_raw( $_SERVER['HTTP_HOST'] ) ) ) ) {
 			return $anchor; // Not append 'TB_iframe' to URL in the same domain (i.e. display as not iframe but AJAX content).
 		}
 
@@ -157,7 +164,7 @@ class WpNewThickbox {
 	} // End of iframe( $anchor ).
 
 	/**
-	 * scripts()
+	 * For scripts.
 	 *
 	 * @return void
 	 **/
@@ -175,7 +182,7 @@ class WpNewThickbox {
 				'image' => $this->texts['image'],
 				'of' => $this->texts['of'],
 				'close' => $this->texts['close'],
-				'noiframes' => __( 'This feature requires inline frames. You have iframes disabled or your browser does not support them.' ),
+				'noiframes' => esc_html__( 'This feature requires inline frames. You have iframes disabled or your browser does not support them.' ),
 				'loadingAnimation' => 'none' !== $this->options['img_load'] ? $this->options['img_load'] : $this->options_def['img_load'],
 				'closeImage' => 'none' !== $this->options['img_close_btn'] ? $this->options['img_close_btn'] : $this->options_def['img_close_btn'],
 			);
@@ -190,12 +197,12 @@ class WpNewThickbox {
 					$l10n['open'] = $this->texts['open'];
 					break;
 				case 'download':
-					$l10n['download'] = __( 'Download' );
+					$l10n['download'] = esc_html__( 'Download' );
 					$l10n['forceDL'] = plugins_url( 'wp-new-thickbox-download.php' );
 					break;
 				case 'expand_shrink':
-					$l10n['actual'] = __( 'Actual Size', 'Original Size' );
-					$l10n['fit'] = __( 'Fit to Window' );
+					$l10n['actual'] = esc_html__( 'Actual Size', 'Original Size' );
+					$l10n['fit'] = esc_html__( 'Fit to Window' );
 					break;
 			}
 			wp_localize_script( 'thickbox', 'thickboxL10n', $l10n );
@@ -216,7 +223,7 @@ class WpNewThickbox {
 	} # styles()
 
 	function print_resources() {
-		echo '<!-- WP New ThickBox by Carlos Longarela (' . __( 'https://desarrolloweb.longarela.eu/' ) . ') -->' . "\n";
+		echo '<!-- WP New ThickBox by Carlos Longarela (' . esc_html__( 'https://desarrolloweb.longarela.eu/' ) . ') -->' . "\n";
 		$this->custom_scripts();
 		$this->custom_styles();
 	}
@@ -682,17 +689,17 @@ if ( 'modified' === $this->options['thickbox_type'] ) {
 
 	function add_wp_new_thickbox_action_links( $links, $file ) {
 		if ( $file == plugin_basename(__FILE__) )
-			$links[] = '<a href="options-general.php?page=wp-new-thickbox">' . __( 'Settings' ) . '</a>';
+			$links[] = '<a href="options-general.php?page=wp-new-thickbox">' . esc_html__( 'Settings' ) . '</a>';
 		return $links;
 	}
 
 	// Additional links on the Plugins page
-	function add_auto_thickbox_links($links, $file) {
-		if ( $file == plugin_basename(__FILE__) ) {
-			$links[] = '<a href="plugin-install.php?tab=plugin-information&plugin=wp-new-thickbox&TB_iframe" class="thickbox" title="Auto ThickBox Plus">' . __('Show Details', 'Details') . '</a>';
-			$links[] = '<a href="http://wordpress.org/support/plugin/wp-new-thickbox" target="_blank">' . __('Support') . '</a>';
-			$links[] = '<a href="' . __('http://attosoft.info/en/') . 'contact/" target="_blank">' . ucfirst(__('Contact', 'contact')) . '</a>';
-			$links[] = '<a href="' . __('http://attosoft.info/en/') . 'donate/" target="_blank">' . __('Donate') . '</a>';
+	function add_wp_new_thickbox_links( $links, $file ) {
+		if ( $file === plugin_basename( __FILE__ ) ) {
+			$links[] = '<a href="plugin-install.php?tab=plugin-information&plugin=wp-new-thickbox&TB_iframe" class="thickbox" title="Auto ThickBox Plus">' . esc_html__('Show Details', 'Details') . '</a>';
+			$links[] = '<a href="http://wordpress.org/support/plugin/wp-new-thickbox" target="_blank">' . esc_html__('Support') . '</a>';
+			$links[] = '<a href="' . esc_html__('http://attosoft.info/en/') . 'contact/" target="_blank">' . ucfirst(esc_html__('Contact', 'contact')) . '</a>';
+			$links[] = '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7WT49YJDWJUCY" target="_blank">' . esc_html__('Donate') . '</a>';
 		}
 		return $links;
 	}
@@ -702,13 +709,13 @@ if ( 'modified' === $this->options['thickbox_type'] ) {
 	var $util;
 
 // Modificado
-//	function auto_thickbox() {
+//	function wp_new_thickbox() {
 //		$this->__construct(); // for PHP4
 //	}
 
 	function __construct() {
 
-		load_plugin_textdomain( 'auto-thickbox', false, 'wp-new-thickbox/languages' );
+		load_plugin_textdomain( 'wp_new_thickbox', false, 'wp-new-thickbox/languages' );
 
 		if ( require_once dirname( __FILE__ ) . '/wp-new-thickbox-utils.php' ) {
 			$this->util = new WpNewThickboxUtils();
@@ -719,7 +726,7 @@ if ( 'modified' === $this->options['thickbox_type'] ) {
 
 		if ( ! is_admin() && isset( $_SERVER['HTTP_USER_AGENT'] ) &&
 			false === strpos( $_SERVER['HTTP_USER_AGENT'], 'W3C_Validator' ) ) {
-			if ( 'filter' === $this->options['auto_thickbox'] && ! class_exists( 'AnchorUtils' ) ) {
+			if ( 'filter' === $this->options['wp_new_thickbox'] && ! class_exists( 'AnchorUtils' ) ) {
 				include dirname( __FILE__ ) . '/anchor-utils/anchor-utils.php';
 			}
 
@@ -729,7 +736,7 @@ if ( 'modified' === $this->options['thickbox_type'] ) {
 			$res_hook = 'header' === $this->options['script_place'] ? 'wp_head' : 'wp_footer';
 			add_action( $res_hook, array( &$this, 'print_resources' ), 20 );
 
-			if ( 'filter' === $this->options['auto_thickbox'] ) {
+			if ( 'filter' === $this->options['wp_new_thickbox'] ) {
 				add_filter( 'filter_anchor', array( &$this, 'filter'  ) );
 			}
 		}
@@ -740,7 +747,7 @@ if ( 'modified' === $this->options['thickbox_type'] ) {
 			}
 
 			add_filter( 'plugin_action_links', array( &$this, 'add_wp_new_thickbox_action_links' ), 10, 2 );
-			add_filter( 'plugin_row_meta', array( &$this, 'add_auto_thickbox_links' ), 10, 2 );
+			add_filter( 'plugin_row_meta', array( &$this, 'add_wp_new_thickbox_links' ), 10, 2 );
 		}
 	}
 
@@ -748,7 +755,7 @@ if ( 'modified' === $this->options['thickbox_type'] ) {
 		$this->options_def = array(
 			'thickbox_style' => 'single',
 			'wp_gallery' => 'on',
-			'auto_thickbox' => 'js',
+			'wp_new_thickbox' => 'js',
 			'thickbox_img' => 'on',
 			'thickbox_text' => 'on',
 			'thickbox_target' => 'off',
@@ -976,8 +983,8 @@ if ( 'modified' === $this->options['thickbox_type'] ) {
 		}
 
 		if ( is_admin() ) {
-			$this->options['text_first'] = __( 'First', 'wp-new-thickbox' );
-			$this->options['text_last'] = __( 'Last', 'wp-new-thickbox' );
+			$this->options['text_first'] = esc_html__( 'First', 'wp-new-thickbox' );
+			$this->options['text_last'] = esc_html__( 'Last', 'wp-new-thickbox' );
 			$updateOption = true;
 		}
 
@@ -988,34 +995,34 @@ if ( 'modified' === $this->options['thickbox_type'] ) {
 	}
 
 	function init_texts() {
-		$this->texts['next'] = __( 'Next &gt;', 'wp-new-thickbox' );
+		$this->texts['next'] = esc_html__( 'Next &gt;', 'wp-new-thickbox' );
 		$this->texts['next2'] = trim( str_replace( array( '&gt;', '&raquo;' ), '', $this->texts['next'] ) );
-		$this->texts['prev'] = __( '&lt; Prev', 'wp-new-thickbox' );
+		$this->texts['prev'] = esc_html__( '&lt; Prev', 'wp-new-thickbox' );
 		$this->texts['prev2'] = trim( str_replace( array( '&lt;', '&laquo;' ), '', $this->texts['prev'] ) );
-		$this->texts['image'] = __( 'Image', 'wp-new-thickbox' );
-		$this->texts['of'] = __( 'of', 'wp-new-thickbox' );
+		$this->texts['image'] = esc_html__( 'Image', 'wp-new-thickbox' );
+		$this->texts['of'] = esc_html__( 'of', 'wp-new-thickbox' );
 		if ( trim( $this->texts['of']) == '' || ( $this->texts['of'] == 'of' && strpos( get_locale(), 'en' ) === false ) ) {
 			$this->texts['of'] = '/';
 		}
-		$this->texts['close'] = ucfirst( __( 'Close', 'wp-new-thickbox' ) );
+		$this->texts['close'] = ucfirst( esc_html__( 'Close', 'wp-new-thickbox' ) );
 
 		$this->texts['first2'] = empty($this->options['text_first']) ? 'First' : ucfirst( $this->options['text_first'] );
 		$this->texts['first'] = '&laquo; ' . $this->texts['first2'];
 		$this->texts['last2'] = empty($this->options['text_last']) ? 'Last' : ucfirst( $this->options['text_last'] );
 		$this->texts['last'] = $this->texts['last2'] . ' &raquo;';
 
-		$this->texts['none'] = ucfirst( __( 'None', 'wp-new-thickbox' ) );
-		$this->texts['wp_gallery'] =  __( 'WordPress Gallery', 'wp-new-thickbox' );
+		$this->texts['none'] = ucfirst( esc_html__( 'None', 'wp-new-thickbox' ) );
+		$this->texts['wp_gallery'] =  esc_html__( 'WordPress Gallery', 'wp-new-thickbox' );
 		if ($this->texts['wp_gallery'] == 'WordPress Gallery' ) {
-			$this->texts['wp_gallery'] = 'WordPress ' . __( 'Gallery', 'wp-new-thickbox' );
+			$this->texts['wp_gallery'] = 'WordPress ' . esc_html__( 'Gallery', 'wp-new-thickbox' );
 		}
-		$this->texts['content_etc'] =  __( 'Content, Excerpt, Comments, Widgets', 'wp-new-thickbox' );
+		$this->texts['content_etc'] =  esc_html__( 'Content, Excerpt, Comments, Widgets', 'wp-new-thickbox' );
 		if ($this->texts['content_etc'] == 'Content, Excerpt, Comments, Widgets')
-			$this->texts['content_etc'] = __('Content', 'wp-new-thickbox' ) . ', ' . __( 'Excerpt', 'wp-new-thickbox' ) . ', ' .  __( 'Comments', 'wp-new-thickbox' ) . ', ' . __( 'Widgets', 'wp-new-thickbox' );
-		$this->texts['open'] = ucfirst( __( 'Open', 'wp-new-thickbox' ) );
+			$this->texts['content_etc'] = esc_html__('Content', 'wp-new-thickbox' ) . ', ' . esc_html__( 'Excerpt', 'wp-new-thickbox' ) . ', ' .  esc_html__( 'Comments', 'wp-new-thickbox' ) . ', ' . esc_html__( 'Widgets', 'wp-new-thickbox' );
+		$this->texts['open'] = ucfirst( esc_html__( 'Open', 'wp-new-thickbox' ) );
 	}
 
-} # auto_thickbox
+}
 
 add_action('init', 'init_wp_new_thickbox');
 function init_wp_new_thickbox() {
