@@ -8,10 +8,10 @@
 class WPNewThickboxOptions {
 
 	function register_options_page() {
-		add_options_page( 'WP New ThickBox' . esc_htmlesc_html__( 'Settings', 'wp-new-thickbox' ), 'WP New ThickBox', 'manage_options', 'wp-new-thickbox', array( &$this, 'options_page' ) );
+		add_options_page( 'WP New ThickBox' . esc_html__( 'Settings', 'wp-new-thickbox' ), 'WP New ThickBox', 'manage_options', 'wp-new-thickbox', array( &$this, 'options_page' ) );
 		add_meta_box( 'general-box', esc_html__( 'General', 'wp-new-thickbox' ), array( &$this, 'general_metabox' ), $this->settings_page_type, 'normal' );
 		add_meta_box( 'action-box', esc_html__( 'Action', 'wp-new-thickbox' ), array( &$this, 'action_metabox' ), $this->settings_page_type, 'normal' );
-		add_meta_box( 'view-box', ucfirst( esc_html__( 'View', 'wp-new-thickbox' ) ), array( &$this, 'view_metabox' ), $this->settings_page_type, 'normal' );
+		add_meta_box( 'view-box', esc_html__( 'View', 'wp-new-thickbox' ), array( &$this, 'view_metabox' ), $this->settings_page_type, 'normal' );
 		add_meta_box( 'text-box', esc_html__( 'Text', 'wp-new-thickbox' ), array( &$this, 'text_metabox' ), $this->settings_page_type, 'normal' );
 		add_meta_box( 'image-box', $this->texts['image'], array( &$this, 'image_metabox' ), $this->settings_page_type, 'normal' );
 		add_meta_box( 'effect-box', esc_html__( 'Effect', 'wp-new-thickbox' ) . ' (' . esc_html__( 'beta', 'wp-new-thickbox' ) . ')', array( &$this, 'effect_metabox' ), $this->settings_page_type, 'normal' );

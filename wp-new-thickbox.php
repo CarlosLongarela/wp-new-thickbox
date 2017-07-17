@@ -182,7 +182,7 @@ class WpNewThickbox {
 				'image' => $this->texts['image'],
 				'of' => $this->texts['of'],
 				'close' => $this->texts['close'],
-				'noiframes' => esc_html__( 'This feature requires inline frames. You have iframes disabled or your browser does not support them.' ),
+				'noiframes' => esc_html__( 'This feature requires inline frames. You have iframes disabled or your browser does not support them.', 'wp-new-thickbox' ),
 				'loadingAnimation' => 'none' !== $this->options['img_load'] ? $this->options['img_load'] : $this->options_def['img_load'],
 				'closeImage' => 'none' !== $this->options['img_close_btn'] ? $this->options['img_close_btn'] : $this->options_def['img_close_btn'],
 			);
@@ -197,11 +197,11 @@ class WpNewThickbox {
 					$l10n['open'] = $this->texts['open'];
 					break;
 				case 'download':
-					$l10n['download'] = esc_html__( 'Download' );
+					$l10n['download'] = esc_html__( 'Download', 'wp-new-thickbox' );
 					$l10n['forceDL'] = plugins_url( 'wp-new-thickbox-download.php' );
 					break;
 				case 'expand_shrink':
-					$l10n['actual'] = esc_html__( 'Actual Size', 'Original Size' );
+					$l10n['actual'] = esc_html__( 'Actual Size', 'wp-new-thickbox' );
 					$l10n['fit'] = esc_html__( 'Fit to Window' );
 					break;
 			}
@@ -210,7 +210,7 @@ class WpNewThickbox {
 	} // End of scripts().
 
 	/**
-	 * styles()
+	 * Register Styles.
 	 *
 	 * @return void
 	 **/
@@ -220,14 +220,24 @@ class WpNewThickbox {
 			wp_register_style( 'thickbox', $this->util->plugins_url( 'thickbox.min.css' ), false, WP_NEW_THICKBOX_VER );
 		}
 		wp_enqueue_style( 'thickbox' );
-	} # styles()
+	} // End of styles().
 
+	/**
+	 * Print resources in html code.
+	 *
+	 * @return void
+	 **/
 	function print_resources() {
-		echo '<!-- WP New ThickBox by Carlos Longarela (' . esc_html__( 'https://desarrolloweb.longarela.eu/' ) . ') -->' . "\n";
+		echo '<!-- WP New ThickBox by Carlos Longarela (https://desarrolloweb.longarela.eu/) -->' . "\n";
 		$this->custom_scripts();
 		$this->custom_styles();
 	}
 
+	/**
+	 * Custom js scripts in html code.
+	 *
+	 * @return void
+	 **/
 	function custom_scripts() {
 ?>
 <script type="text/javascript">
@@ -268,7 +278,7 @@ if ( 'js' === $this->options['wp_new_thickbox'] ) {
 	});
 
 	// Images
-	var imageRegex = /\.(jpe?g|gif|png|bmp|webp)($|[?&#])/i;
+	var imageRegex = '/\.(jpe?g|gif|png|bmp|webp)($|[?&#])/i';
 	var images = links.filter(function() {
 		return imageRegex.test($(this).attr('href'));
 	});
@@ -289,7 +299,7 @@ if ( 'js' === $this->options['wp_new_thickbox'] ) {
 	others.filter('.thickbox').not('[href*="TB_iframe"]').not('[href*="#TB_inline"]').each(function() {
 		var href = $(this).attr('href');
 		if (href.indexOf('://') != -1 && href.indexOf(location.host) == -1) {
-			// Add 'TB_iframe' to external URL
+			// Add 'TB_iframe' to external URL.
 			var hashIndex = href.indexOf('#');
 			var before = hashIndex == -1 ? href : href.substring(0, hashIndex);
 			var after = hashIndex == -1 ? '' : href.substring(hashIndex);
