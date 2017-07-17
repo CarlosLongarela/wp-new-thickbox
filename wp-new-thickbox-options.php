@@ -960,10 +960,10 @@ class WPNewThickboxOptions {
 //	}
 
 	function __construct( &$wp_new_thickbox ) {
-		add_action( 'admin_menu', array( &$this, 'register_options_page' ));
-		add_action( 'admin_init', array( &$this, 'register_options' ));
-		add_action( 'admin_print_scripts-' . $this->settings_page_type, array( &$this, 'register_scripts' ));
-		add_action( 'admin_print_styles-' . $this->settings_page_type, array( &$this, 'register_styles' ));
+		add_action( 'admin_menu', array( &$this, 'register_options_page' ) );
+		add_action( 'admin_init', array( &$this, 'register_options' ) );
+		add_action( 'admin_print_scripts-' . $this->settings_page_type, array( &$this, 'register_scripts' ) );
+		add_action( 'admin_print_styles-' . $this->settings_page_type, array( &$this, 'register_styles' ) );
 
 		$this->util        = &$wp_new_thickbox->util;
 		$this->options_def = &$wp_new_thickbox->options_def;
@@ -975,27 +975,29 @@ class WPNewThickboxOptions {
 		register_setting( $this->option_group, 'wp-new-thickbox', array( &$this, 'options_callback' ) );
 	}
 
-	var $checkboxes_on = array( 'wp_gallery',
-                                'thickbox_img',
-                                'thickbox_text',
-                                'auto_resize_img',
-                                'key_close_esc',
-                                'key_close_enter',
-                                'key_prev_angle',
-                                'key_prev_left',
-                                'key_next_angle',
-                                'key_next_right',
-                                'key_end_home_end',
+	var $checkboxes_on = array(
+								'wp_gallery',
+								'thickbox_img',
+								'thickbox_text',
+								'auto_resize_img',
+								'key_close_esc',
+								'key_close_enter',
+								'key_prev_angle',
+								'key_prev_left',
+								'key_next_angle',
+								'key_next_right',
+								'key_end_home_end',
 	);
 
-	function options_callback($options) {
-		if (isset($_POST['reset'])) {
-			add_settings_error('general', 'settings_updated', __('Settings reset.'), 'updated');
+	function options_callback( $options ) {
+		if ( isset( $_POST['reset'] ) ) {
+			add_settings_error( 'general', 'settings_updated', __( 'Settings reset.', 'wp-new-thickbox' ), 'updated' );
 			return $this->options_def;
 		}
-		foreach ($this->checkboxes_on as $checkbox) {
-			if (!isset($options[$checkbox]))
-				$options[$checkbox] = 'off';
+		foreach ( $this->checkboxes_on as $checkbox ) {
+			if ( ! isset( $options[ $checkbox ] ) ) {
+				$options[ $checkbox ] = 'off';
+			}
 		}
 		return $options;
 	}
