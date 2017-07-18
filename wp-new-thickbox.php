@@ -1121,7 +1121,7 @@ if ( 'modified' === $this->options['thickbox_type'] ) {
 	 * @return array
 	 **/
 	function add_wp_new_thickbox_action_links( $links, $file ) {
-		if ( plugin_basename( __FILE__ ) === file ) {
+		if ( plugin_basename( __FILE__ ) === $file ) {
 			$links[] = '<a href="options-general.php?page=wp-new-thickbox">' . esc_html__( 'Settings', 'wp-new-thickbox' ) . '</a>';
 		}
 

@@ -26,16 +26,4 @@ class WpNewThickboxUtils {
 		return $result;
 	} // End of disabled( $disabled, $current = true, $echo = true ).
 
-	/**
-	* @see /wp-admin/includes/template.php or /wp-includes/general-template.php
-	* @note '$current = true' and '$echo' is defined since WordPress 2.8
-	*/
-	// TODO: Check WP versions and options.
-	function checked( $checked, $current = true, $echo = true ) {
-		if ( version_compare( '2.8', get_bloginfo( 'version' ) ) > 0 ) {
-			checked( $checked, $current );
-		} else {
-			return checked( $checked, $current, $echo );
-		}
-	} // End of function checked( $checked, $current = true, $echo = true ).
 }
