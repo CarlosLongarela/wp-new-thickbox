@@ -62,7 +62,6 @@ class WpNewThickbox {
 
 	var $options, $options_def;
 	var $texts;
-	var $util;
 
 // Modificado
 //	function wp_new_thickbox() {
@@ -72,10 +71,6 @@ class WpNewThickbox {
 	function __construct() {
 
 		load_plugin_textdomain( 'wp_new_thickbox', false, 'wp-new-thickbox/languages' );
-
-		if ( require_once dirname( __FILE__ ) . '/wp-new-thickbox-utils.php' ) {
-			$this->util = new WpNewThickboxUtils();
-		}
 
 		$this->init_options();
 		$this->init_texts();
