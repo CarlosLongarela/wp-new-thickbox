@@ -51,7 +51,8 @@ Domain Path: /languages
  */
 
 define( 'WP_NEW_THICKBOX_VER', '1.0' );
-
+define( 'WP_NEW_THICKBOX_PATH', plugin_dir_path( __FILE__ ) ); // Pugin Path with trailing slash.
+define( 'WP_NEW_THICKBOX_URL', plugins_url( '/', __FILE__ ) ); // Pugin URL with trailing slash.
 /**
  * WPNewThickbox Primary class.
  *
@@ -201,13 +202,13 @@ class WpNewThickbox {
 			'ref_title' => "'link-title','link-name','blank','img-title','img-alt','img-desc','img-name'",
 			'ref_cap' => "'link-title','link-name','blank','img-title','img-alt','img-desc','img-name','img-cap'",
 			'post_id' => '0',
-			'img_prev' => $this->util->plugins_url('images/tb-prev.png'),
-			'img_next' => $this->util->plugins_url('images/tb-next.png'),
-			'img_first' => $this->util->plugins_url('images/tb-first.png'),
-			'img_last' => $this->util->plugins_url('images/tb-last.png'),
-			'img_close' => $this->util->plugins_url('images/tb-close.png'),
-			'img_close_btn' => $this->util->plugins_url('images/tb-close.png'),
-			'img_load' => $this->util->plugins_url('images/loadingAnimation.gif')
+			'img_prev' => WP_NEW_THICKBOX_URL . 'images/tb-prev.png',
+			'img_next' => WP_NEW_THICKBOX_URL . 'images/tb-next.png',
+			'img_first' => WP_NEW_THICKBOX_URL . 'images/tb-first.png',
+			'img_last' => WP_NEW_THICKBOX_URL . 'images/tb-last.png',
+			'img_close' => WP_NEW_THICKBOX_URL . 'images/tb-close.png',
+			'img_close_btn' => WP_NEW_THICKBOX_URL . 'images/tb-close.png',
+			'img_load' => WP_NEW_THICKBOX_URL . 'images/loadingAnimation.gif',
 		);
 		$this->options = get_option('wp-new-thickbox');
 		$this->options = $this->options ? wp_parse_args($this->options, $this->options_def) : $this->options_def;
@@ -490,7 +491,7 @@ class WpNewThickbox {
 		if ( 'modified' === $this->options['thickbox_type'] ) {
 			wp_deregister_script( 'thickbox' );
 			$in_footer = 'footer' === $this->options['script_place'];
-			wp_register_script( 'thickbox', $this->util->plugins_url( 'thickbox.min.js' ), array( 'jquery' ), WP_NEW_THICKBOX_VER, $in_footer );
+			wp_register_script( 'thickbox', WP_NEW_THICKBOX_URL . 'thickbox.min.js', array( 'jquery' ), WP_NEW_THICKBOX_VER, $in_footer );
 		}
 		wp_enqueue_script( 'thickbox' );
 		if ( 'modified' === $this->options['thickbox_type'] ) {
@@ -516,7 +517,7 @@ class WpNewThickbox {
 					break;
 				case 'download':
 					$l10n['download'] = esc_html__( 'Download', 'wp-new-thickbox' );
-					$l10n['forceDL'] = plugins_url( 'wp-new-thickbox-download.php' );
+					$l10n['forceDL'] = WP_NEW_THICKBOX_URL . 'wp-new-thickbox-download.php';
 					break;
 				case 'expand_shrink':
 					$l10n['actual'] = esc_html__( 'Actual Size', 'wp-new-thickbox' );
@@ -535,7 +536,7 @@ class WpNewThickbox {
 	function styles() {
 		if ( 'modified' === $this->options['thickbox_type'] ) {
 			wp_deregister_style( ' thickbox' );
-			wp_register_style( 'thickbox', $this->util->plugins_url( 'thickbox.min.css' ), false, WP_NEW_THICKBOX_VER );
+			wp_register_style( 'thickbox', WP_NEW_THICKBOX_URL . 'thickbox.min.css', false, WP_NEW_THICKBOX_VER );
 		}
 		wp_enqueue_style( 'thickbox' );
 	} // End of styles().

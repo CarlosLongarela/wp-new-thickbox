@@ -32,11 +32,11 @@ class WPNewThickboxOptions {
 		if ( $this->has_slider ) {
 			$deps[] = 'jquery-ui-slider';
 		}
-		wp_enqueue_script( 'wp-new-thickbox', $this->util->plugins_url( 'wp-new-thickbox.js' ), $deps, WP_NEW_THICKBOX_VER, true );
+		wp_enqueue_script( 'wp-new-thickbox', WP_NEW_THICKBOX_URL . 'wp-new-thickbox.js', $deps, WP_NEW_THICKBOX_VER, true );
 	}
 
 	function register_styles() {
-		wp_enqueue_style( 'wp-new-thickbox', $this->util->plugins_url( 'wp-new-thickbox.css' ), array( 'farbtastic', 'thickbox' ), WP_NEW_THICKBOX_VER );
+		wp_enqueue_style( 'wp-new-thickbox', WP_NEW_THICKBOX_URL . 'wp-new-thickbox.css', array( 'farbtastic', 'thickbox' ), WP_NEW_THICKBOX_VER );
 	}
 
 	function options_page() {
@@ -71,10 +71,10 @@ class WPNewThickboxOptions {
 		<td>
 			<label><input type="radio" name="wp-new-thickbox[thickbox_style]" value="single"<?php $this->util->checked( $this->options['thickbox_style'], 'single' ); ?> />
 			<?php esc_html_e( 'Single Image', 'wp-new-thickbox' ); ?></label>
-			(<a href="<?php echo $this->util->plugins_url( 'screenshot-1.jpg' ); ?>" class="thickbox-image" title="<?php esc_html_e( 'Single Image', 'wp-new-thickbox' ); ?>"><?php esc_html_e( 'Preview', 'wp-new-thickbox' ); ?></a>)
+			(<a href="<?php echo WP_NEW_THICKBOX_URL . 'screenshot-1.jpg'; ?>" class="thickbox-image" title="<?php esc_html_e( 'Single Image', 'wp-new-thickbox' ); ?>"><?php esc_html_e( 'Preview', 'wp-new-thickbox' ); ?></a>)
 			<label class="boundary"><input type="radio" name="wp-new-thickbox[thickbox_style]" value="gallery"<?php $this->util->checked( $this->options['thickbox_style'], 'gallery'); ?> />
 			<?php esc_html_e( 'Gallery Images', 'wp-new-thickbox' ); ?></label>
-			(<a href="<?php echo $this->util->plugins_url( 'screenshot-2.jpg' ); ?>" class="thickbox-image" title="<?php esc_html_e( 'Gallery Images', 'wp-new-thickbox' ); ?>" rel="gallery"><?php esc_html_e( 'Preview', 'wp-new-thickbox' ); ?></a>)
+			(<a href="<?php echo WP_NEW_THICKBOX_URL . 'screenshot-2.jpg'; ?>" class="thickbox-image" title="<?php esc_html_e( 'Gallery Images', 'wp-new-thickbox' ); ?>" rel="gallery"><?php esc_html_e( 'Preview', 'wp-new-thickbox' ); ?></a>)
 		</td>
 	</tr>
 	<tr>

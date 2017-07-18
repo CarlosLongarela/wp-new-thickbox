@@ -38,12 +38,4 @@ class WpNewThickboxUtils {
 			return checked( $checked, $current, $echo );
 		}
 	} // End of function checked( $checked, $current = true, $echo = true ).
-
-	// @note '$plugin' is defined since WordPress 2.8
-	function plugins_url( $path, $plugin = '' ) {
-		if ( ! $plugin ) {
-			$plugin = __FILE__;
-		}
-		return version_compare( '2.8', get_bloginfo( 'version' ) ) > 0 ? plugins_url( 'wp-new-thickbox/' . $path ) : plugins_url( $path, $plugin );
-	} // End of plugins_url( $path, $plugin = '' ).
 }
